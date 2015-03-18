@@ -14,6 +14,7 @@ A simple MIPS processor
 
 ## Instructions
 ### Arithmetic Instructions
+__Machine Code__: `0aaa dddd ssss tttt`
 #### Three address instructions
 __Opcode rd, rs, rt__
 * `ADD`: rd <- rs + rt
@@ -27,5 +28,18 @@ __Opcode rd, rs, imm4__
 * `SRA`: rd <- signext(rs) >> imm
 * `SRL`: rd <- rs >> imm
 * `SLL`: rd <- rs << imm
-* 
+
 More details in source
+
+### Load/Store Instructions
+__Machine Code__: `10aa tttt oooo oooo`
+
+__Opcode rt, offset8__
+
+* `SW`: MEM[$DS + signext(offset)] <- rt
+* `LW`: rt <- MEM[$DS + signext(offset)]
+
+__Opcode rt, imm8__
+
+* `LHB`: rt[15:8] <- imm8
+* `LLB`: rt[7:0] <- imm8
