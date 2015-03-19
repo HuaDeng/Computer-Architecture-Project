@@ -43,3 +43,26 @@ __Opcode rt, imm8__
 
 * `LHB`: rt[15:8] <- imm8
 * `LLB`: rt[7:0] <- imm8
+
+### Control Instructions
+#### Branch
+__B cond3, offset8__
+
+Conditionally jump to address obtained by adding the 8-bit immediate to the PC.
+This is a delayed branch, so the instruction immediately following the branch is always execcuted.
+
+#### Call
+__CALL target12__
+
+1. Push the PC to the stack
+  1. Store PC to (SP)
+  2. SP--
+2. Set the 12 least significant bits of the PC to target
+
+#### Return
+__RET__
+
+Pop the top of the stack into the PC
+
+1. $SP++
+2. Store (SP) into PC
