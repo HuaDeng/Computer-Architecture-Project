@@ -1,4 +1,12 @@
 /*CS 552 Project ALU units*/
+`define ALU_ADD 3'b000
+`define ALU_SUB 3'b001
+`define ALU_NAND 3'b010
+`define ALU_XOR 3'b011
+`define ALU_INC 3'b100
+`define ALU_SRA 3'b101
+`define ALU_SRL 3'b110
+`define ALU_SLL 3'b111
 
 module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
 
@@ -12,24 +20,16 @@ module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
 	wire [15:0] alu_result;
 	wire [15:0] alu_xb;
 
-	parameter alu_add = 3'b000;
-	parameter alu_sub = 3'b001;
-	parameter alu_nand = 3'b010;
-	parameter alu_xor = 3'b011;
-	parameter alu_inc = 3'b100;
-	parameter alu_sra = 3'b101;
-	parameter alu_srl = 3'b110;
-	parameter alu_sll = 3'b111;
 
-	assign alu_xb = (alu_op == alu_sub) ? (~alu_b + 1'b1) : alu_b; // a - b = a + (-b)
+	assign alu_xb = (alu_op == `ALU_SUB) ? (~alu_b + 1'b1) : alu_b; // a - b = a + (-b)
 
-	assign alu_result = (alu_op == alu_add || alu_op == alu_sub)? alu_a + alu_xb:
-											(alu_op == alu_nand) ? ~(alu_a | alu_b):
-											(alu_op == alu_xor) ? alu_a ^ alu_b:
-											(alu_op == alu_inc) ? alu_a + alu_b:
-											(alu_op == alu_sra) ? ($signed (alu_a) >>> alu_b):
-											(alu_op == alu_srl) ? alu_a >> alu_b:
-											(alu_op == alu_sll) ? alu_a << alu_b:
+	assign alu_result = (alu_op == `ALU_ADD || alu_op == `ALU_SUB)? alu_a + alu_xb:
+											(alu_op == `ALU_NAND) ? ~(alu_a | alu_b):
+											(alu_op == `ALU_XOR) ? alu_a ^ alu_b:
+											(alu_op == `ALU_INC) ? alu_a + alu_b:
+											(alu_op == `ALU_SRA) ? ($signed (alu_a) >>> alu_b):
+											(alu_op == `ALU_SRL) ? alu_a >> alu_b:
+											(alu_op == `ALU_SLL) ? alu_a << alu_b:
 											16'hxxxx;
 
 	assign n = alu_result[15]; //Sign of alu result
