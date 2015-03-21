@@ -21,7 +21,7 @@ module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
 
 	assign alu_result = (alu_op == `ALU_ADD)?  alu_a + alu_b:
                         (alu_op == `ALU_SUB)?  alu_a - alu_b:
-                        (alu_op == `ALU_NAND)? ~(alu_a | alu_b):
+                        (alu_op == `ALU_NAND)? ~(alu_a & alu_b):
                         (alu_op == `ALU_XOR)?  alu_a ^ alu_b:
                         (alu_op == `ALU_INC)?  alu_a + alu_b:
                         (alu_op == `ALU_SRA)?  ($signed (alu_a) >>> alu_b):
