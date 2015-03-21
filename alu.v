@@ -1,12 +1,12 @@
 /*CS 552 Project ALU units*/
 
-module ALU_16(alu_op, alu_a, alu_b, alu_out, z, v, n);
+module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
 
 	input [2:0] alu_op;
 	input [15:0] alu_a;
 	input [15:0] alu_b;
 
-	output [15:0] alu_out;
+	output [15:0] alu_result;
 	output z, v, n;
 
 	wire [15:0] alu_result;
@@ -30,7 +30,7 @@ module ALU_16(alu_op, alu_a, alu_b, alu_out, z, v, n);
 											(alu_op == alu_sra) ? ($signed (alu_a) >>> alu_b):
 											(alu_op == alu_srl) ? alu_a >> alu_b:
 											(alu_op == alu_sll) ? alu_a << alu_b:
-											16'hzzzz;
+											16'hxxxx;
 
 	assign n = alu_result[15]; //Sign of alu result
 	assign z = ~|alu_result; // Zero
