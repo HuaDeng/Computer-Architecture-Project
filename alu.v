@@ -24,7 +24,7 @@ module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
                         (alu_op == `ALU_NAND)? ~(alu_a & alu_b):
                         (alu_op == `ALU_XOR)?  alu_a ^ alu_b:
                         (alu_op == `ALU_INC)?  alu_a + alu_b:
-                        (alu_op == `ALU_SRA)?  ($signed (alu_a) >>> alu_b):
+                        (alu_op == `ALU_SRA)?  {$signed(alu_a) >>> alu_b}:
                         (alu_op == `ALU_SRL)?  alu_a >> alu_b:
                         (alu_op == `ALU_SLL)?  alu_a << alu_b:
                         16'hxxxx;
