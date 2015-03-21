@@ -10,6 +10,7 @@ module ALU_16_add_tb;
 
     initial begin
         fail = 0;
+        alu_op = `ALU_ADD;
         test_add_normal();
         test_add_overflow();
         test_add_negative();
@@ -19,7 +20,6 @@ module ALU_16_add_tb;
 
     task test_add_normal;
         begin
-            alu_op = 3'b0;
             alu_a = 16'b1;
             alu_b = 16'b1;
             #1;
@@ -44,24 +44,23 @@ module ALU_16_add_tb;
 
     task test_add_overflow;
         begin
-            alu_op = 3'b0;
             alu_a = 16'b0111111111111111;
             alu_b = 16'b1;
             #1;
             if(alu_out !== 16'h8000) begin
-                $display("Fail test_add_normal: Expected 0x8000, got %h",alu_out);
+                $display("Fail test_add_overflow: Expected 0x8000, got %h",alu_out);
                 fail = 1;
             end
             if(!n) begin
-                $display("Fail test_add_normal: Sign flag");
+                $display("Fail test_add_overflow: Sign flag");
                 fail = 1;
             end
             if(z) begin
-                $display("Fail test_add_normal: Zero flag");
+                $display("Fail test_add_overflow: Zero flag");
                 fail = 1;
             end
             if(!v) begin
-                $display("Fail test_add_normal: Overflow flag");
+                $display("Fail test_add_overflow: Overflow flag");
                 fail = 1;
             end
         end
@@ -69,24 +68,23 @@ module ALU_16_add_tb;
 
     task test_add_negative;
         begin
-            alu_op = 3'b0;
             alu_a = -16'd1;
             alu_b = -16'b1;
             #1;
             if(alu_out !== -16'h2) begin
-                $display("Fail test_add_normal: Expected -2, got %h",alu_out);
+                $display("Fail test_add_negative: Expected -2, got %h",alu_out);
                 fail = 1;
             end
             if(!n) begin
-                $display("Fail test_add_normal: Sign flag");
+                $display("Fail test_add_negative: Sign flag");
                 fail = 1;
             end
             if(z) begin
-                $display("Fail test_add_normal: Zero flag");
+                $display("Fail test_add_negative: Zero flag");
                 fail = 1;
             end
             if(v) begin
-                $display("Fail test_add_normal: Overflow flag");
+                $display("Fail test_add_negative: Overflow flag");
                 fail = 1;
             end
         end
@@ -94,24 +92,23 @@ module ALU_16_add_tb;
     
     task test_add_zero;
         begin
-            alu_op = 3'b0;
             alu_a = -16'd1;
             alu_b = 16'b1;
             #1;
             if(alu_out !== 16'h0) begin
-                $display("Fail test_add_normal: Expected 0, got %h",alu_out);
+                $display("Fail test_add_zero: Expected 0, got %h",alu_out);
                 fail = 1;
             end
             if(n) begin
-                $display("Fail test_add_normal: Sign flag");
+                $display("Fail test_add_zero: Sign flag");
                 fail = 1;
             end
             if(!z) begin
-                $display("Fail test_add_normal: Zero flag");
+                $display("Fail test_add_zero: Zero flag");
                 fail = 1;
             end
             if(v) begin
-                $display("Fail test_add_normal: Overflow flag");
+                $display("Fail test_add_zero: Overflow flag");
                 fail = 1;
             end
         end
