@@ -46,19 +46,19 @@ module ALU_16_nand_tb;
             alu_b = 16'hFFFF;
             #1;
             if(alu_out !== 16'h0) begin
-                $display("Fail test_add_zero: Expected 0, got %h",alu_out);
+                $display("Fail test_nand_zero: Expected 0, got %h",alu_out);
                 fail = 1;
             end
             if(n) begin
-                $display("Fail test_add_zero: Sign flag");
+                $display("Fail test_nand_zero: Sign flag");
                 fail = 1;
             end
             if(!z) begin
-                $display("Fail test_add_zero: Zero flag");
+                $display("Fail test_nand_zero: Zero flag");
                 fail = 1;
             end
             if(v) begin
-                $display("Fail test_add_zero: Overflow flag");
+                $display("Fail test_nand_zero: Overflow flag");
                 fail = 1;
             end
         end
