@@ -18,22 +18,21 @@ module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
 	output z, v, n;
 
 	wire [15:0] alu_result;
-	wire [15:0] alu_xb;
 
-
-	assign alu_xb = (alu_op == `ALU_SUB) ? (~alu_b + 1'b1) : alu_b; // a - b = a + (-b)
-
-	assign alu_result = (alu_op == `ALU_ADD || alu_op == `ALU_SUB)? alu_a + alu_xb:
-											(alu_op == `ALU_NAND) ? ~(alu_a | alu_b):
-											(alu_op == `ALU_XOR) ? alu_a ^ alu_b:
-											(alu_op == `ALU_INC) ? alu_a + alu_b:
-											(alu_op == `ALU_SRA) ? ($signed (alu_a) >>> alu_b):
-											(alu_op == `ALU_SRL) ? alu_a >> alu_b:
-											(alu_op == `ALU_SLL) ? alu_a << alu_b:
-											16'hxxxx;
+	assign alu_result = (alu_op == `ALU_ADD)?  alu_a + alu_b:
+                        (alu_op == `ALU_SUB)?  alu_a - alu_b:
+                        (alu_op == `ALU_NAND)? ~(alu_a | alu_b):
+                        (alu_op == `ALU_XOR)?  alu_a ^ alu_b:
+                        (alu_op == `ALU_INC)?  alu_a + alu_b:
+                        (alu_op == `ALU_SRA)?  ($signed (alu_a) >>> alu_b):
+                        (alu_op == `ALU_SRL)?  alu_a >> alu_b:
+                        (alu_op == `ALU_SLL)?  alu_a << alu_b:
+                        16'hxxxx;
 
 	assign n = alu_result[15]; //Sign of alu result
 	assign z = ~|alu_result; // Zero
-	assign v = (alu_a[15] && alu_xb[15] && ~n) | (~alu_a[15] && ~alu_xb[15] && n); //overflow
+	assign v = (alu_op == `ALU_ADD)?
+       (alu_a[15] && alu_b[15] && ~n) | (~alu_a[15] && ~alu_b[15] && n): // Add overflow
+       (alu_a[15] && ~alu_b[15] && ~n) | (~alu_a[15] && alu_b[15] && n); // Subtract overflow
 
 endmodule
