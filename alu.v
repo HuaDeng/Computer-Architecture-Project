@@ -28,8 +28,8 @@ module ALU_16(alu_op, alu_a, alu_b, alu_result, z, v, n);
                         (alu_op == `ALU_SRL)?  alu_a >> alu_b:
                         (alu_op == `ALU_SLL)?  alu_a << alu_b:
                         16'hxxxx;
-
-	assign n = alu_result[15]; //Sign of alu result
+    //Sign of alu result, only set by ADD or SUB
+	assign n = ((alu_op == `ALU_ADD) || (alu_op == `ALU_SUB)) && alu_result[15]; 
 	assign z = ~|alu_result; // Zero
 	assign v = (alu_op == `ALU_ADD)?
        (alu_a[15] && alu_b[15] && ~n) | (~alu_a[15] && ~alu_b[15] && n): // Add overflow

@@ -25,7 +25,8 @@ module ALU_16_nand_tb;
                 $display("Fail test_nand_normal: Expected 0xFFFE, got %h",alu_out);
                 fail = 1;
             end
-            if(!n) begin
+            //SIGN is only set by ADD and SUB
+            if(n) begin
                 $display("Fail test_nand_normal: Sign flag");
                 fail = 1;
             end
