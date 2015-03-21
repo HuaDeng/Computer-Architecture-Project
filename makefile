@@ -7,7 +7,10 @@ alu_sub_tb: alu.v alu_sub_tb.v
 alu_nand_tb: alu.v alu_nand_tb.v
 	iverilog $^ -o $@
 
+alu_xor_tb: alu.v alu_xor_tb.v
+	iverilog $^ -o $@
+
 run_%: %
 	./$*
 
-test: run_alu_add_tb run_alu_sub_tb run_alu_nand_tb
+test: run_alu_add_tb run_alu_sub_tb run_alu_nand_tb run_alu_xor_tb
