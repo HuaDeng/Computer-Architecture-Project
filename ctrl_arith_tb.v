@@ -38,23 +38,23 @@ module CTRL_arith_tb;
             // ADD R0,R0,R0
             Opcode = {`ALU_ADD, 4'b0000,4'b0000,4'b0000};
             #1;
-            if(pc_src != `PC_SRC_NOM) begin
+            if(pc_src !== `PC_SRC_NOM) begin
                 $display("Fail test_add_normal: pc_src");
                 fail = 1;
             end
-            if(rf_wsrc != `RF_WSRC_INST) begin
+            if(rf_wsrc !== `RF_WSRC_INST) begin
                 $display("Fail test_add_normal: rf_wsrc");
                 fail = 1;
             end
-            if(rf_rsrc1 != 0) begin
+            if(rf_rsrc1 !== 0) begin
                 $display("Fail test_add_normal: rf_rsrc1");
                 fail = 1;
             end
-            if(rf_rsrc2 != 0) begin
+            if(rf_rsrc2 !== 0) begin
                 $display("Fail test_add_normal: rf_rsrc2");
                 fail = 1;
             end
-            if(rf_w != 1) begin
+            if(rf_w !== 1) begin
                 $display("Fail test_add_normal: rf_w");
                 fail = 1;
             end
