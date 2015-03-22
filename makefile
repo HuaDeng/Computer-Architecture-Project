@@ -19,7 +19,10 @@ alu_sra_tb: alu.v alu_sra_tb.v
 alu_srl_tb: alu.v alu_srl_tb.v
 	iverilog $^ -o $@
 
+alu_sll_tb: alu.v alu_sll_tb.v
+	iverilog $^ -o $@
+
 run_%: %
 	./$*
 
-test: run_alu_add_tb run_alu_sub_tb run_alu_nand_tb run_alu_xor_tb run_alu_inc_tb run_alu_sra_tb run_alu_srl_tb
+test: run_alu_add_tb run_alu_sub_tb run_alu_nand_tb run_alu_xor_tb run_alu_inc_tb run_alu_sra_tb run_alu_srl_tb run_alu_sll_tb
