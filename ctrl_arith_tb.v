@@ -58,6 +58,10 @@ module CTRL_arith_tb;
                 $display("Fail test_add_normal: rf_w");
                 fail = 1;
             end
+            if(aluop != `ALU_ADD) begin
+                $display("Fail test_add_normal: aluop");
+                fail = 1;
+            end
         end
     endtask
 
