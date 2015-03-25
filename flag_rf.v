@@ -8,6 +8,10 @@
 `define LESS_OR_EQUAL 4'bz110
 `define TRUE 4'bz111
 
+`define ZVN_NEGATIVE 0
+`define ZVN_OVERFLOW 1
+`define ZVN_ZERO 2
+
 module flag_rf(clk, cond, z, v, n, out);
     input clk;
     input [3:0] cond;
@@ -17,35 +21,34 @@ module flag_rf(clk, cond, z, v, n, out);
 
     reg [2:0] zvn; 
 
-
     always @(posedge clk) begin
-        zvn[0] <= n;
-        zvn[1] <= v;
-        zvn[2] <= z;
+        zvn[`ZVN_NEGATIVE] <= n;
+        zvn[`ZVN_OVERFLOW] <= v;
+        zvn[`ZVN_ZERO] <= z;
     end
     
     always @(*) begin
         casez(cond)
             `EQUAL: begin
-                out <= (zvn[2] == 1'b1)? 1'b1 : 1'b0;
+                out <= zvn[`ZVN_ZERO];
             end
             `LESS: begin
-                out <= (zvn[1] == 1'b0 && zvn[0] == 1)? 1'b1 : 1'b0;
+                out <= (~zvn[`ZVN_OVERFLOW]) && zvn[`ZVN_NEGATIVE];
             end
             `GREATER: begin
-                out <= (zvn == 3'b000)? 1'b1 : 1'b0;
+                out <= zvn == 3'b000;
             end
             `OVERFLOW: begin
-                out <= (zvn[1] == 1'b1)? 1'b1 : 1'b0;
+                out <= zvn[`ZVN_OVERFLOW];
             end
             `NOT_EQUAL: begin
-                out <= (zvn[2] == 1'b0)? 1'b1 : 1'b0;
+                out <= ~zvn[`ZVN_ZERO];
             end
             `GREATER_OR_EQUAL: begin
-                out <= (zvn[1] == 1'b1 || zvn[0] == 1'b0)? 1'b1 : 1'b0;
+                out <= zvn[`ZVN_OVERFLOW] || (~zvn[`ZVN_NEGATIVE]);
             end
             `LESS_OR_EQUAL: begin
-                out <= ((zvn[0] == 1'b1 && zvn[1] == 1'b0) || zvn[2] == 1'b1)? 1'b1 : 1'b0;
+                out <= (zvn[`ZVN_NEGATIVE] && (~zvn[`ZVN_OVERFLOW])) || zvn[`ZVN_ZERO];
             end
             `TRUE: begin
                 out <= 1'b1;
