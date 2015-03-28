@@ -45,9 +45,10 @@
 
 `define RF_RSRC2_RT 2'b00
 `define RF_RSRC2_DS 2'b01
+`define RF_RSRC2_R1 2'b10
 
-`define RF_W_RD 1'b1
-`define RF_W_SP 1'b0
+`define RF_W_YES 1'b1
+`define RF_W_NO 1'b0
 
 `define ALU_SRC1_P0 1'b0
 `define ALU_SRC1_P1 1'b1
@@ -107,7 +108,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
         rf_wsrc = `RF_WSRC_INST;
         rf_rsrc1 = `RF_RSRC1_RS;
         rf_rsrc2 = `RF_RSRC2_RT;
-        rf_w = `RF_W_RD;
+        rf_w = `RF_W_YES;
         alu_src1 = `ALU_SRC1_P0;
         alu_src2 = `ALU_SRC2_P1;
         sel_call = `SEL_CALL_NO;
@@ -148,7 +149,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
                 rf_wsrc = 1'bx;
                 rf_rsrc1 = `RF_RSRC1_RD;
                 rf_rsrc2 = `RF_RSRC2_DS;
-                rf_w = `RF_W_SP;
+                rf_w = `RF_W_NO;
                 alu_src1 = `ALU_SRC1_P1;
                 alu_src2 = `ALU_SRC2_IMM_SEXT;
                 dm_in = `DM_IN_P0;
@@ -185,7 +186,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             `CALL_INSTR:  begin
                 rf_wsrc = `RF_WSRC_SP;
                 rf_rsrc1 = `RF_RSRC1_SP;
-                rf_rsrc2 = 2'b10;
+                rf_rsrc2 = `RF_RSRC2_R1;
                 sel_call = `SEL_CALL_YES;
                 aluop = 3'b001;
                 dm_in = `DM_IN_PC;
@@ -197,7 +198,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
                 pc_src = `PC_SRC_OFF;
                 rf_wsrc = `RF_WSRC_SP;
                 rf_rsrc1 = `RF_RSRC1_SP;
-                rf_rsrc2 = 2'b10;
+                rf_rsrc2 = `RF_RSRC2_R1;
                 aluop = 3'b000;
                 dm_addr = `DM_ADDR_ALU;
                 dm_read = `DM_READ_YES;
