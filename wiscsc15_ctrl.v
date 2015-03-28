@@ -44,8 +44,8 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b11;
@@ -62,8 +62,8 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b11;
@@ -80,8 +80,8 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b11;
@@ -98,8 +98,8 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b11;
@@ -116,7 +116,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
+            dm_in = 1'bx;
             dm_addr = 1'b1;
             dm_read = 1'b1;
             dm_write = 1'b0;
@@ -125,7 +125,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
 
 		sw_instr:    begin
             pc_src = 1'b0;
-            rf_wsrc = 1'bz;
+            rf_wsrc = 1'bx;
             rf_rsrc1 = 2'b01;
             rf_rsrc2 = 2'b01;
             rf_w = 1'b0;
@@ -138,22 +138,22 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             dm_addr = 1'b1;
             dm_read = 1'b0;
             dm_write = 1'b1;
-            rf_data = 2'bzz;
+            rf_data = 2'bxx;
         end
 
 		lhb_instr:   begin
             pc_src = 1'b0;
             rf_wsrc = 1'b1;
             rf_rsrc1 = 2'b01;
-            rf_rsrc2 = 2'bzz;
+            rf_rsrc2 = 2'bxx;
             rf_w = 1'b1;
-            alu_src1 = 1'bz;
-            alu_src2 = 2'bzz;
+            alu_src1 = 1'bx;
+            alu_src2 = 2'bxx;
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b01;
@@ -163,15 +163,15 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             pc_src = 1'b0;
             rf_wsrc = 1'b1;
             rf_rsrc1 = 2'b01;
-            rf_rsrc2 = 2'bzz;
+            rf_rsrc2 = 2'bxx;
             rf_w = 1'b1;
-            alu_src1 = 1'bz;
-            alu_src2 = 2'bzz;
+            alu_src1 = 1'bx;
+            alu_src2 = 2'bxx;
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = Opcode[2:0];
-            dm_in = 1'bz;
-            dm_addr = 1'bz;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
             dm_read = 1'b0;
             dm_write = 1'b0;
             rf_data = 2'b10;
@@ -224,7 +224,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             sel_call = 1'b0;
             sel_branch = 1'b0;
             aluop = 3'b000;
-            dm_in = 1'bz;
+            dm_in = 1'bx;
             dm_addr = 1'b1;
             dm_read = 1'b1;
             dm_write = 1'b0;
