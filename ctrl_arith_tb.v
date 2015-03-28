@@ -1,8 +1,3 @@
-`define PC_SRC_NOM 0
-`define PC_SRC_OFF 1
-`define RF_WSRC_INST 1
-`define RF_WSRC_SP 0
-
 module CTRL_arith_tb;
 
     reg [3:0] Opcode;
