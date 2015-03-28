@@ -32,221 +32,124 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
 	parameter ret_instr = 4'b1110; //instruction; return
 
 	always @(Opcode) begin
+
+        // Common outputs
+        pc_src = 1'b0;
+        rf_wsrc = 1'b1;
+        rf_rsrc1 = 2'b00;
+        rf_rsrc2 = 2'b00;
+        rf_w = 1'b1;
+        alu_src1 = 1'b0;
+        alu_src2 = 2'b00;
+        sel_call = 1'b0;
+        sel_branch = 1'b0;
+        aluop = Opcode[2:0];
+        dm_in = 1'bx;
+        dm_addr = 1'bx;
+        dm_read = 1'b0;
+        dm_write = 1'b0;
+        rf_data = 2'b11;
+
 		casez (Opcode)
-		arith_instr: begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b00;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b00;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b11;
-        end
+            arith_instr: begin
+            end
 
-		inc_instr:   begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b00;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b10;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b11;
-        end
+            inc_instr:   begin
+                alu_src2 = 2'b10;
+            end
 
-		sra_instr: 	 begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b00;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b01;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b11;
-        end
+            sra_instr: 	 begin
+                alu_src2 = 2'b01;
+            end
 
-		sl_instr:    begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b00;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b01;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b11;
-        end
+            sl_instr:    begin
+                alu_src2 = 2'b01;
+            end
 
-		lw_instr:    begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b01;
-            rf_w = 1'b1;
-            alu_src1 = 1'b1;
-            alu_src2 = 2'b11;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'b1;
-            dm_read = 1'b1;
-            dm_write = 1'b0;
-            rf_data = 2'b00;
-        end
+            lw_instr:    begin
+                rf_rsrc2 = 2'b01;
+                alu_src1 = 1'b1;
+                alu_src2 = 2'b11;
+                dm_addr = 1'b1;
+                dm_read = 1'b1;
+                rf_data = 2'b00;
+            end
 
-		sw_instr:    begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'bx;
-            rf_rsrc1 = 2'b01;
-            rf_rsrc2 = 2'b01;
-            rf_w = 1'b0;
-            alu_src1 = 1'b1;
-            alu_src2 = 2'b11;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'b1;
-            dm_addr = 1'b1;
-            dm_read = 1'b0;
-            dm_write = 1'b1;
-            rf_data = 2'bxx;
-        end
+            sw_instr:    begin
+                rf_wsrc = 1'bx;
+                rf_rsrc1 = 2'b01;
+                rf_rsrc2 = 2'b01;
+                rf_w = 1'b0;
+                alu_src1 = 1'b1;
+                alu_src2 = 2'b11;
+                dm_in = 1'b1;
+                dm_addr = 1'b1;
+                dm_write = 1'b1;
+                rf_data = 2'bxx;
+            end
 
-		lhb_instr:   begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b01;
-            rf_rsrc2 = 2'bxx;
-            rf_w = 1'b1;
-            alu_src1 = 1'bx;
-            alu_src2 = 2'bxx;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b01;
-        end
+            lhb_instr:   begin
+                rf_rsrc1 = 2'b01;
+                rf_rsrc2 = 2'bxx;
+                alu_src1 = 1'bx;
+                alu_src2 = 2'bxx;
+                rf_data = 2'b01;
+            end
 
-		llb_instr:	 begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b01;
-            rf_rsrc2 = 2'bxx;
-            rf_w = 1'b1;
-            alu_src1 = 1'bx;
-            alu_src2 = 2'bxx;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = Opcode[2:0];
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b10;
-        end
+            llb_instr:	 begin
+                rf_rsrc1 = 2'b01;
+                rf_rsrc2 = 2'bxx;
+                alu_src1 = 1'bx;
+                alu_src2 = 2'bxx;
+                rf_data = 2'b10;
+            end
 
-		brch_instr:  begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b1;
-            rf_rsrc1 = 2'b00;
-            rf_rsrc2 = 2'b00;
-            rf_w = 1'b0;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b00;
-            sel_call = 1'b0;
-            sel_branch = 1'b1;
-            aluop = 3'b000;
-            dm_in = 1'b0;
-            dm_addr = 1'b0;
-            dm_read = 1'b0;
-            dm_write = 1'b0;
-            rf_data = 2'b00;
-        end
+            brch_instr:  begin
+                rf_w = 1'b0;
+                sel_branch = 1'b1;
+                aluop = 3'b000;
+                dm_in = 1'b0;
+                dm_addr = 1'b0;
+                rf_data = 2'b00;
+            end
 
-		call_instr:  begin
-            pc_src = 1'b0;
-            rf_wsrc = 1'b0;
-            rf_rsrc1 = 2'b10;
-            rf_rsrc2 = 2'b10;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b00;
-            sel_call = 1'b1;
-            sel_branch = 1'b0;
-            aluop = 3'b001;
-            dm_in = 1'b0;
-            dm_addr = 1'b0;
-            dm_read = 1'b0;
-            dm_write = 1'b1;
-            rf_data = 2'b11;
-        end
+            call_instr:  begin
+                rf_wsrc = 1'b0;
+                rf_rsrc1 = 2'b10;
+                rf_rsrc2 = 2'b10;
+                sel_call = 1'b1;
+                aluop = 3'b001;
+                dm_in = 1'b0;
+                dm_addr = 1'b0;
+                dm_write = 1'b1;
+            end
 
-		ret_instr:   begin
-            pc_src = 1'b1;
-            rf_wsrc = 1'b0;
-            rf_rsrc1 = 2'b10;
-            rf_rsrc2 = 2'b10;
-            rf_w = 1'b1;
-            alu_src1 = 1'b0;
-            alu_src2 = 2'b00;
-            sel_call = 1'b0;
-            sel_branch = 1'b0;
-            aluop = 3'b000;
-            dm_in = 1'bx;
-            dm_addr = 1'b1;
-            dm_read = 1'b1;
-            dm_write = 1'b0;
-            rf_data = 2'b11;
-        end
-        default: begin
-            pc_src = 1'bx;
-            rf_wsrc = 1'bx;
-            rf_rsrc1 = 2'bxx;
-            rf_rsrc2 = 2'bxx;
-            rf_w = 1'bx;
-            alu_src1 = 1'bx;
-            alu_src2 = 2'bxx;
-            sel_call = 1'bx;
-            sel_branch = 1'bx;
-            aluop = 3'bxxx;
-            dm_in = 1'bx;
-            dm_addr = 1'bx;
-            dm_read = 1'bx;
-            dm_write = 1'bx;
-            rf_data = 2'bxx;
-        end
+            ret_instr:   begin
+                pc_src = 1'b1;
+                rf_wsrc = 1'b0;
+                rf_rsrc1 = 2'b10;
+                rf_rsrc2 = 2'b10;
+                aluop = 3'b000;
+                dm_addr = 1'b1;
+                dm_read = 1'b1;
+            end
+            default: begin
+                pc_src = 1'bx;
+                rf_wsrc = 1'bx;
+                rf_rsrc1 = 2'bxx;
+                rf_rsrc2 = 2'bxx;
+                rf_w = 1'bx;
+                alu_src1 = 1'bx;
+                alu_src2 = 2'bxx;
+                sel_call = 1'bx;
+                sel_branch = 1'bx;
+                aluop = 3'bxxx;
+                dm_in = 1'bx;
+                dm_addr = 1'bx;
+                dm_read = 1'bx;
+                dm_write = 1'bx;
+                rf_data = 2'bxx;
+            end
 		endcase							   
 	end 
 endmodule 
