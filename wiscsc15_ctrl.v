@@ -230,6 +230,23 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
             dm_write = 1'b0;
             rf_data = 2'b11;
         end
+        default: begin
+            pc_src = 1'bx;
+            rf_wsrc = 1'bx;
+            rf_rsrc1 = 2'bxx;
+            rf_rsrc2 = 2'bxx;
+            rf_w = 1'bx;
+            alu_src1 = 1'bx;
+            alu_src2 = 2'bxx;
+            sel_call = 1'bx;
+            sel_branch = 1'bx;
+            aluop = 3'bxxx;
+            dm_in = 1'bx;
+            dm_addr = 1'bx;
+            dm_read = 1'bx;
+            dm_write = 1'bx;
+            rf_data = 2'bxx;
+        end
 		endcase							   
 	end 
 endmodule 
