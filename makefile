@@ -33,3 +33,4 @@ dut_tb: wiscsc15_ctrl.v tests/dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_un
 .PHONY: clean
 clean:
 	rm -f $(ALL_TESTS)
+	rm -f variables.dump
