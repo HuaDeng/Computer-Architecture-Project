@@ -55,7 +55,6 @@ always @(clk,dst_addr,dst,we)
 always @(clk,we,dst_addr,dst)
     if (clk && we && |dst_addr) begin
         mem[dst_addr] <= dst;
-        $display("Wrote %h to register %d",dst, dst_addr);
     end
 	
 //////////////////////////////
