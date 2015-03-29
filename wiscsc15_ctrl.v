@@ -101,7 +101,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
     output reg dm_write;
     output reg [1:0] rf_data;
 
-    always @(Opcode) begin
+    always @(*) begin
 
         // Common outputs
         pc_src = `PC_SRC_NOM;
@@ -154,7 +154,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
                 alu_src2 = `ALU_SRC2_IMM_SEXT;
                 dm_in = `DM_IN_P0;
                 dm_addr = `DM_ADDR_ALU;
-                dm_write = `DM_WRITE_NO;
+                dm_write = `DM_WRITE_YES;
                 rf_data = 2'bxx;
             end
 
@@ -191,7 +191,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
                 aluop = 3'b001;
                 dm_in = `DM_IN_PC;
                 dm_addr = `DM_ADDR_P0;
-                dm_write = `DM_WRITE_NO;
+                dm_write = `DM_WRITE_YES;
             end
 
             `RET_INSTR:   begin
