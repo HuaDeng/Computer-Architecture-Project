@@ -10,6 +10,8 @@ ALL_TESTS= alu_add_tb\
 		   flag_rf_tb\
 		   dut_tb
 
+test: $(ALL_TESTS)
+
 alu_%: alu.v tests/alu_%.v
 	iverilog $^ -o $@
 	./$@
@@ -31,5 +33,3 @@ dut_tb: wiscsc15_ctrl.v tests/dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_un
 .PHONY: clean
 clean:
 	rm -f $(ALL_TESTS)
-
-test: $(ALL_TESTS)
