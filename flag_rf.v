@@ -45,7 +45,7 @@ module flag_rf(clk, cond, z, v, n, out);
                 out <= ~zvn[`ZVN_ZERO];
             end
             `GREATER_OR_EQUAL: begin
-                out <= zvn[`ZVN_OVERFLOW] || (~zvn[`ZVN_NEGATIVE]);
+                out <= ~zvn[`ZVN_OVERFLOW] && (~zvn[`ZVN_NEGATIVE]);
             end
             `LESS_OR_EQUAL: begin
                 out <= (zvn[`ZVN_NEGATIVE] && (~zvn[`ZVN_OVERFLOW])) || zvn[`ZVN_ZERO];

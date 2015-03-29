@@ -13,6 +13,8 @@ module flag_rf_tb;
         clk = 0;
         flag_rf_equal();
         flag_rf_less();
+        flag_rf_greater();
+        flag_rf_greater_or_equal();
         $finish;
     end
     
