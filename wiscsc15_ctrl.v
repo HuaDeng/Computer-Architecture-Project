@@ -156,6 +156,7 @@ module wiscsc15_ctrl(Opcode, pc_src, rf_wsrc, rf_rsrc1, rf_rsrc2, rf_w, alu_src1
                 dm_addr = `DM_ADDR_ALU;
                 dm_write = `DM_WRITE_YES;
                 rf_data = 2'bxx;
+                aluop = 3'b000;
             end
 
             `LHB_INSTR:   begin
