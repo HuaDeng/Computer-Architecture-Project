@@ -143,8 +143,8 @@ module DUT(clk,rst);
         case(rf_rsrc2)
             `RF_RSRC2_RT: p1_addr = instr[3:0];
             `RF_RSRC2_DS: p1_addr = 4'd14;
-            `RF_RSRC2_R1: p1_addr = 1;
-            default: p0_addr = 4'hx;
+            `RF_RSRC2_R1: p1_addr = 4'd1;
+            default: p1_addr = 4'hx;
         endcase
     end
 
