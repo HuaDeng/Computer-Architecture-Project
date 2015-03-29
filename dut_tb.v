@@ -1,8 +1,8 @@
-module all_tb;
+module dut_tb;
     reg clk;
     reg rst;
 
-    All a1(clk,rst);
+    DUT a1(clk,rst);
 
     initial begin
         $dumpfile("variables.dump");
