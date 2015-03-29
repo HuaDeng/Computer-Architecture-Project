@@ -14,7 +14,7 @@ module All(clk,rst);
     wire sel_call;
     wire sel_branch;
     wire[2:0] aluop;
-    wire dm_in;
+    wire dm_in_src;
     wire dm_addr_src;
     wire dm_read;
     wire dm_write;
