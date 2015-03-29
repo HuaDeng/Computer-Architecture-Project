@@ -46,6 +46,7 @@ module DUT(clk,rst);
     wire hold; //hold the current program counter value, TODO
     reg[15:0] in_PC; // pc_src mux -> pc
     wire[15:0] out_PC; // pc -> instr_mem.addr and adder
+    reg[15:0] out_PC_1;
 
     // RF
     reg[3:0] p0_addr; // rf_rsrc1 mux -> rf
@@ -63,16 +64,20 @@ module DUT(clk,rst);
     reg [15:0] dm_wrt_data; // dm_in mux -> dm
     wire [15:0] dm_rd_data; // dm -> rf_data mux and pc_src mux
 
+    // Flag_rf
+    wire branch_flag;
 
-    wire[15:0] nxt_PC;
+    reg[15:0] nxt_PC;
+    wire[15:0] imm_sext;
 
     assign rd_en = 1;
     assign hold = 0;
 
-    assign nxt_PC = out_PC + 1;
     assign re0 = 1;
     assign re1 = 1;
     assign Opcode = instr[15:12];
+
+    assign imm_sext = {{8{instr[7]}}, {instr[7:0]}};
 
     wiscsc15_ctrl w1(Opcode,
         pc_src,
@@ -97,6 +102,8 @@ module DUT(clk,rst);
     pc pc1(clk, rst, hold, in_PC, out_PC);
     rf rf1(clk,p0_addr,p1_addr,p0,p1,re0,re1,dst_addr,dst,rf_w,hlt);
     DM dm(clk,dm_addr,dm_read,dm_write,dm_wrt_data,dm_rd_data);
+    flag_rf f1(clk, instr[11:8], z, v, n, branch_flag);
+
 
     // Muxes
     // rf_data mux
@@ -163,7 +170,7 @@ module DUT(clk,rst);
             `ALU_SRC2_P1: alu_b = p1;
             `ALU_SRC2_RT_ZEXT: alu_b = {{12{1'b0}}, {instr[3:0]}};
             `ALU_SRC2_RT_SEXT: alu_b = {{12{instr[3]}}, {instr[3:0]}};
-            `ALU_SRC2_IMM_SEXT: alu_b = {{6{instr[7]}}, {instr[7:0]}};
+            `ALU_SRC2_IMM_SEXT: alu_b = imm_sext;
             default: alu_b = 16'hxxxx;
         endcase
     end
@@ -172,7 +179,7 @@ module DUT(clk,rst);
     always @(*) begin
         case(dm_in_src)
             `DM_IN_P0: dm_wrt_data = p0;
-            `DM_IN_PC: dm_wrt_data = out_PC + 1;
+            `DM_IN_PC: dm_wrt_data = out_PC_1;
             default: dm_wrt_data = 16'hxxxx;
         endcase
     end
@@ -184,6 +191,20 @@ module DUT(clk,rst);
             `DM_ADDR_P0: dm_addr = p0;
             default: dm_addr = 16'hxxxx;
         endcase
+    end
+
+    // PC combinational logic
+    always @(*) begin
+        out_PC_1 = out_PC + 1;
+        nxt_PC = out_PC_1;
+        if(sel_call) begin
+            nxt_PC = {out_PC_1[15:12], instr[11:0]};
+        end
+        else begin
+            if(sel_branch &&  branch_flag) begin
+                nxt_PC = out_PC_1 + imm_sext;
+            end
+        end
     end
 
 endmodule

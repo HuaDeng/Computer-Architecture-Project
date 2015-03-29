@@ -11,7 +11,7 @@ module dut_tb;
         #1;
         rst = 0;
         clk = 0;
-        repeat(7) @(posedge clk);
+        repeat(100) @(posedge clk);
         $finish;
     end
 

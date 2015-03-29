@@ -22,7 +22,7 @@ flag_rf_tb: flag_rf.v flag_rf_tb.v
 	iverilog $^ -o $@
 	./$@
 
-dut_tb: wiscsc15_ctrl.v dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v instr.hex
+dut_tb: wiscsc15_ctrl.v dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v flag_rf.v instr.hex
 	iverilog $(filter %.v, $^) -o $@
 	./$@
 
