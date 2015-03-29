@@ -1,4 +1,4 @@
-module All(clk,rst);
+module DUT(clk,rst);
     input clk;
     input rst;
     
