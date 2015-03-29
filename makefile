@@ -10,21 +10,23 @@ ALL_TESTS= alu_add_tb\
 		   flag_rf_tb\
 		   dut_tb
 
-alu_%: alu.v alu_%.v
+alu_%: alu.v tests/alu_%.v
 	iverilog $^ -o $@
 	./$@
 
-ctrl_%: wiscsc15_ctrl.v alu.v ctrl_%.v 
+ctrl_%: wiscsc15_ctrl.v alu.v tests/ctrl_%.v 
 	iverilog $^ -o $@
 	./$@
 
-flag_rf_tb: flag_rf.v flag_rf_tb.v
+flag_rf_tb: flag_rf.v tests/flag_rf_tb.v
 	iverilog $^ -o $@
 	./$@
 
-dut_tb: wiscsc15_ctrl.v dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v flag_rf.v instr.hex
+dut_tb: wiscsc15_ctrl.v tests/dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v flag_rf.v tests/instr.hex
 	iverilog $(filter %.v, $^) -o $@
+	ln tests/instr.hex ./
 	./$@
+	rm instr.hex
 
 .PHONY: clean
 clean:
