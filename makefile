@@ -7,7 +7,8 @@ ALL_TESTS= alu_add_tb\
 		   alu_srl_tb\
 		   alu_sll_tb\
 		   ctrl_arith_tb\
-		   flag_rf_tb
+		   flag_rf_tb\
+		   dut_tb
 
 alu_%: alu.v alu_%.v
 	iverilog $^ -o $@
@@ -21,8 +22,8 @@ flag_rf_tb: flag_rf.v flag_rf_tb.v
 	iverilog $^ -o $@
 	./$@
 
-dut_tb: wiscsc15_ctrl.v dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v
-	iverilog $^ -o $@
+dut_tb: wiscsc15_ctrl.v dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v instr.hex
+	iverilog $(filter %.v, $^) -o $@
 	./$@
 
 .PHONY: clean

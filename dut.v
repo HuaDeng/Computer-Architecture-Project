@@ -18,7 +18,7 @@ module All(clk,rst);
     wire dm_addr_src;
     wire dm_read;
     wire dm_write;
-    wire[1:0] rf_data;
+    wire[1:0] rf_data_src;
 
     // ALU
     wire[2:0] alu_op;
@@ -54,7 +54,6 @@ module All(clk,rst);
     wire re1;          // TODO
     reg[3:0] dst_addr;// rf_wsrc mux -> rf
     reg[15:0] dst;    // rf_data mux -> rf
-    wire we;           // TODO -> rf
     wire hlt;          // Not a functional input
     wire[15:0] p0;     // rf -> dm_in mux and alu_src1 mux 
     wire[15:0] p1;     // rf -> alu_src1 mux and alu_src2 mux
@@ -66,6 +65,14 @@ module All(clk,rst);
 
 
     wire[15:0] nxt_PC;
+
+    assign rd_en = 1;
+    assign hold = 0;
+
+    assign nxt_PC = out_PC + 1;
+    assign re0 = 1;
+    assign re1 = 1;
+    assign Opcode = instr[15:12];
 
     wiscsc15_ctrl w1(Opcode,
         pc_src,
@@ -82,9 +89,9 @@ module All(clk,rst);
         dm_addr_src,
         dm_read,
         dm_write,
-        rf_data);
-    ALU_16 alu(alu_op, alu_a, alu_b, alu_result, z, v, n);
-    IM im(clk,addr,rd_en,instr);
+        rf_data_src);
+    ALU_16 alu(aluop, alu_a, alu_b, alu_result, z, v, n);
+    IM im(clk,out_PC,rd_en,instr);
     llb_unit llb(p0, in_2, llb_out);
     lhb_unit lhb(p0, in_2, lhb_out);
     pc pc1(clk, rst, hold, in_PC, out_PC);
@@ -94,7 +101,7 @@ module All(clk,rst);
     // Muxes
     // rf_data mux
     always @(*) begin
-        case(rf_data)
+        case(rf_data_src)
             `RF_DATA_ALU: dst = alu_result;
             `RF_DATA_DM: dst = dm_rd_data;
             `RF_DATA_LHB: dst = lhb_out;
