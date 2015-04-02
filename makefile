@@ -8,7 +8,9 @@ ALL_TESTS= alu_add_tb\
 		   alu_sll_tb\
 		   ctrl_arith_tb\
 		   flag_rf_tb\
-		   dut_tb
+		   WB_tb\
+		   MEM_tb\
+		   ID_tb
 
 test: $(ALL_TESTS)
 
@@ -29,6 +31,18 @@ dut_tb: wiscsc15_ctrl.v tests/dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_un
 	ln tests/instr.hex ./
 	./$@
 	rm instr.hex
+
+WB_tb: tests/WB_tb.v WB.v
+	iverilog $^ -o $@
+	./$@
+
+MEM_tb: tests/MEM_tb.v MEM.v data_mem.v
+	iverilog $^ -o $@
+	./$@
+
+ID_tb: tests/ID_tb.v ID.v rf_pipelined.v
+	iverilog $^ -o $@
+	./$@
 
 .PHONY: clean
 clean:
