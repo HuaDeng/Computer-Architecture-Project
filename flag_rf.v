@@ -1,54 +1,43 @@
 /*CS 552 Project FLAG register unit*/
 `define EQUAL 4'bz000
-`define LESS 4'bz001
-`define GREATER 4'bz010
-`define OVERFLOW 4'bz011
-`define NOT_EQUAL 4'bz100
-`define GREATER_OR_EQUAL 4'bz101
-`define LESS_OR_EQUAL 4'bz110
-`define TRUE 4'bz111
-
-`define ZVN_NEGATIVE 0
-`define ZVN_OVERFLOW 1
-`define ZVN_ZERO 2
-
-module flag_rf(clk, cond, z, v, n, out);
+`include "cond_code.h"
+module flag_rf(clk, cond, nxt_z, nxt_v, nxt_n, out);
     input clk;
     input [3:0] cond;
-    input z, v, n;
+    input nxt_z, nxt_v, nxt_n;
 
     output reg out;
 
-    reg [2:0] zvn; 
+    reg z, v, n; 
 
     always @(posedge clk) begin
-        zvn[`ZVN_NEGATIVE] <= n;
-        zvn[`ZVN_OVERFLOW] <= v;
-        zvn[`ZVN_ZERO] <= z;
+        n <= nxt_n;
+        v <= nxt_v;
+        z <= nxt_z;
     end
     
     always @(*) begin
         casez(cond)
             `EQUAL: begin
-                out <= zvn[`ZVN_ZERO];
+                out <= z;
             end
             `LESS: begin
-                out <= (~zvn[`ZVN_OVERFLOW]) && zvn[`ZVN_NEGATIVE];
+                out <= (~v) && n;
             end
             `GREATER: begin
-                out <= zvn == 3'b000;
+                out <= ~z && ~n && ~v;
             end
             `OVERFLOW: begin
-                out <= zvn[`ZVN_OVERFLOW];
+                out <= v;
             end
             `NOT_EQUAL: begin
-                out <= ~zvn[`ZVN_ZERO];
+                out <= ~z;
             end
             `GREATER_OR_EQUAL: begin
-                out <= ~zvn[`ZVN_OVERFLOW] && (~zvn[`ZVN_NEGATIVE]);
+                out <= ~v && ~n;
             end
             `LESS_OR_EQUAL: begin
-                out <= (zvn[`ZVN_NEGATIVE] && (~zvn[`ZVN_OVERFLOW])) || zvn[`ZVN_ZERO];
+                out <= (n && ~v) || z;
             end
             `TRUE: begin
                 out <= 1'b1;
