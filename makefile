@@ -11,7 +11,8 @@ ALL_TESTS= alu_add_tb\
 		   WB_tb\
 		   MEM_tb\
 		   ID_tb\
-		   EX_tb
+		   EX_tb\
+		   jump_tb
 
 test: $(ALL_TESTS)
 
@@ -46,6 +47,10 @@ ID_tb: tests/ID_tb.v ID.v rf_pipelined.v
 	./$@
 
 EX_tb: tests/EX_tb.v EX.v alu.v
+	iverilog $^ -o $@
+	./$@
+
+jump_tb: tests/jump_tb.v jump.v
 	iverilog $^ -o $@
 	./$@
 
