@@ -54,7 +54,7 @@ module MEM(wb, ret_addr, we, dm_in, dm_addr, dm_re, dm_we, instr_in, result, rt,
             `CALL: begin
                        // Push PC to stack, decrement SP
                        dm_we = 1;
-                       dm_addr = result + 1; // result = SP - 1, now dm_addr = SP
+                       dm_addr = rt; // result = SP - 1, now rt = SP
                        dm_in = pc;
                        wb = result;
             end

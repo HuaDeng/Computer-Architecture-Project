@@ -203,7 +203,7 @@ module ID_tb;
             @(posedge clk);
             if(alu1 !== 16'h10CC)
                 $display("Failed test_call alu1: %h", alu1);
-            if(alu2 !== -16'd1)
+            if(alu2 !== 16'd1)
                 $display("Failed test_call alu2: %h", alu2);
         end
     endtask

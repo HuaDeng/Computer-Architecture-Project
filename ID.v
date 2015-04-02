@@ -77,7 +77,7 @@ module ID(alu1, alu2, p0_addr, p1_addr, re0, re1, p0, p1, instr);
             end
             `CALL: begin
                 alu1 = p0;
-                alu2 = -16'd1;
+                alu2 = 16'd1;
                 p0_addr = 4'd15; // SP
                 p1_addr = 4'hx;
             end

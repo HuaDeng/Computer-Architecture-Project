@@ -244,7 +244,7 @@ module MEM_tb;
             // CALL with PC=BABA and SP=2
             instr_in = {`CALL, 12'h100};
             result = 16'd1; // SP - 1 = 1
-            rt = 16'hxxxx;
+            rt = 16'h0002;
             pc = 16'hBABA;
             @(posedge clk);
             if(we !== 1)
@@ -259,16 +259,16 @@ module MEM_tb;
     task test_ret;
         begin
             @(posedge clk);
-            // RET with SP=4 and ABCD at the top of the stack
-            d1.data_mem[5] = 16'hABCD;
+            // RET with SP=5 and ABCD at the top of the stack
+            d1.data_mem[6] = 16'hABCD;
             instr_in = {`RET, 12'hxxx};
-            result = 16'd5; // SP + 1 = 1
+            result = 16'd6; // SP + 1 = 5
             rt = 16'hxxxx;
             pc = 16'hxxxx;
             @(posedge clk);
             if(we !== 1)
                 $display("Failed test_ret we: %h", we);
-            if(wb !== 16'd5)
+            if(wb !== 16'd6)
                 $display("Failed test_ret wb: %h", wb);
             if(ret_addr !== 16'hABCD)
                 $display("Failed test_ret ret_addr: %h", ret_addr);
