@@ -53,8 +53,9 @@ always @(clk,dst_addr,dst,we)
 // RF is written on clock high //
 ////////////////////////////////
 always @(clk,we,dst_addr,dst)
-  if (clk && we && |dst_addr)
-    mem[dst_addr] <= dst;
+    if (clk && we && |dst_addr) begin
+        mem[dst_addr] <= dst;
+    end
 	
 //////////////////////////////
 // RF is read on clock low //
