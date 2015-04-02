@@ -10,7 +10,8 @@ ALL_TESTS= alu_add_tb\
 		   flag_rf_tb\
 		   WB_tb\
 		   MEM_tb\
-		   ID_tb
+		   ID_tb\
+		   EX_tb
 
 test: $(ALL_TESTS)
 
@@ -41,6 +42,10 @@ MEM_tb: tests/MEM_tb.v MEM.v data_mem.v
 	./$@
 
 ID_tb: tests/ID_tb.v ID.v rf_pipelined.v
+	iverilog $^ -o $@
+	./$@
+
+EX_tb: tests/EX_tb.v EX.v alu.v
 	iverilog $^ -o $@
 	./$@
 
