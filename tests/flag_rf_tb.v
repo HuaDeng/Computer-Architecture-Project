@@ -1,15 +1,14 @@
+`include "cond_code.h"
+`include "opcode.h"
 module flag_rf_tb;
     reg clk;
-    reg [3:0] cond;
-    reg z, v, n;
+    reg alu_z, alu_v, alu_n;
+    reg[15:0] instr;
     wire out;
 
-    reg fail;
-
-    flag_rf rf_flag(clk,cond,z,v,n,out);
+    flag_rf rf_flag(out, clk, alu_z,alu_v,alu_n,instr);
 
     initial begin
-        fail = 0;
         clk = 0;
         flag_rf_equal();
         flag_rf_less();
@@ -20,151 +19,99 @@ module flag_rf_tb;
     
     task flag_rf_equal;
         begin
-            z = 1;
-            v = 0;
-            n = 0;
-            cond = `EQUAL;
-            #1;
-            clk = 1;
+            rf_flag.z = 1;
+            rf_flag.v = 0;
+            rf_flag.n = 0;
+            instr = {`B, 1'bx, `EQUAL, 8'hxx };
             #1;
             if(out !== 1'b1) begin
                 $display("Fail flag_rf_equal: expected 1, got %b",out);
-                fail = 1;
             end
-            z = 0;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.z = 0;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_equal: expected 0, got %b",out);
-                fail = 1;
             end
-            clk = 0;
-            #1;
         end
     endtask
 
     task flag_rf_less;
         begin
-            z = 0;
-            v = 0;
-            n = 1;
-            cond = `LESS;
-            #1;
-            clk = 1;
+            rf_flag.z = 0;
+            rf_flag.v = 0;
+            rf_flag.n = 1;
+            instr = {`B, 1'bx, `LESS, 8'hxx };
             #1;
             if(out !== 1'b1) begin
                 $display("Fail flag_rf_less: expected 1, got %b",out);
-                fail = 1;
             end
-            n = 0;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.n = 0;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_less: expected 0, got %b",out);
-                fail = 1;
             end
-            v = 1;
-            n = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.v = 1;
+            rf_flag.n = 1;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_less: expected 0, got %b",out);
-                fail = 1;
             end
-            clk = 0;
-            #1;
         end
     endtask
 
     task flag_rf_greater;
         begin
-            z = 0;
-            v = 0;
-            n = 0;
-            cond = `GREATER;
-            #1;
-            clk = 1;
+            rf_flag.z = 0;
+            rf_flag.v = 0;
+            rf_flag.n = 0;
+            instr = {`B, 1'bx, `GREATER, 8'hxx };
             #1;
             if(out !== 1'b1) begin
                 $display("Fail flag_rf_greater: expected 1, got %b",out);
-                fail = 1;
             end
-            n = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.n = 1;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_greater: expected 0, got %b",out);
-                fail = 1;
             end
-            n = 0;
-            v = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.n = 0;
+            rf_flag.v = 1;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_greater: expected 0, got %b",out);
-                fail = 1;
             end
-            clk = 0;
-            #1;
         end
     endtask
 
     task flag_rf_greater_or_equal;
         begin
-            z = 0;
-            v = 0;
-            n = 0;
-            cond = `GREATER_OR_EQUAL;
-            #1;
-            clk = 1;
+            rf_flag.z = 0;
+            rf_flag.v = 0;
+            rf_flag.n = 0;
+            instr = {`B, 1'bx, `GREATER_OR_EQUAL, 8'hxx };
             #1;
             if(out !== 1'b1) begin
                 $display("Fail flag_rf_greater: expected 1, got %b",out);
-                fail = 1;
             end
-            n = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.n = 1;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_greater: expected 0, got %b",out);
-                fail = 1;
             end
-            n = 0;
-            v = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+            rf_flag.n = 0;
+            rf_flag.v = 1;
             #1;
             if(out !== 0) begin
                 $display("Fail flag_rf_greater: expected 0, got %b",out);
-                fail = 1;
             end
-            clk = 0;
-            #1;
-            n = 0;
-            v = 0;
-            z = 1;
-            clk = 0;
-            #1;
-            clk = 1;
+
+            rf_flag.n = 0;
+            rf_flag.v = 0;
+            rf_flag.z = 1;
             #1;
             if(out !== 1) begin
                 $display("Fail flag_rf_greater: expected 1, got %b",out);
-                fail = 1;
             end
-            clk = 0;
             #1;
         end
     endtask

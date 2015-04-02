@@ -1,10 +1,11 @@
 `ifndef COND_CODE_H
 `define COND_CODE_H
-`define LESS 4'bz001
-`define GREATER 4'bz010
-`define OVERFLOW 4'bz011
-`define NOT_EQUAL 4'bz100
-`define GREATER_OR_EQUAL 4'bz101
-`define LESS_OR_EQUAL 4'bz110
-`define TRUE 4'bz111
+`define EQUAL 3'b000
+`define LESS 3'b001
+`define GREATER 3'b010
+`define OVERFLOW 3'b011
+`define NOT_EQUAL 3'b100
+`define GREATER_OR_EQUAL 3'b101
+`define LESS_OR_EQUAL 3'b110
+`define TRUE 3'b111
 `endif
