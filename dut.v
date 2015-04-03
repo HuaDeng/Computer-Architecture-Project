@@ -202,7 +202,7 @@ module dut(clk, rst);
     ////////////////////////////////
     //         Write Back         //
     ////////////////////////////////
-    wire[15:0] wb_addr;
+    wire[3:0] wb_addr;
 
     WB wb(wb_addr, in_PC, mem_instr, wb_we, wb_wb, wb_ret_addr, nxt_PC);
 
