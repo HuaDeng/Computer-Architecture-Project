@@ -140,3 +140,29 @@ class TestXOR(unittest.TestCase):
         -6, # -1 XOR 5
          3, # -2 XOR -3
          6,7,-8,-7,-6,-5,-4,-3,-2,-1])
+
+class TestSRA(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/test_sra.hex','./instr.hex')
+        check_call(['./dut_tb'])
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+
+    def test_sra(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_output(rf_dump.read())
+        self.assertListEqual(register_file_history[-1,:].tolist(),
+        [0,
+         2, # 4 >> 1
+         1, # 4 >> 2
+         -1, # -1 >> 3
+         4,
+         5,
+         6,7,-8,-7,-6,-5,-4,-3,-2,-1])
