@@ -22,22 +22,37 @@ module flag_rf(out, clk, alu_z, alu_v, alu_n, instr);
         nxt_v = v;
         case(instr[15:12])
             // If arithemtic instruction, clock in the new flags
-            `ADD: reg_set();
-            `SUB: reg_set();
-            `NAND: reg_set();
-            `XOR: reg_set();
-            `INC: reg_set();
+            `ADD: begin
+                nxt_n = alu_n;
+                nxt_v = alu_v;
+                nxt_z = alu_z;
+            end
+            `SUB:begin
+                nxt_n = alu_n;
+                nxt_v = alu_v;
+                nxt_z = alu_z;
+            end
+
+            `NAND:begin
+                nxt_n = alu_n;
+                nxt_v = alu_v;
+                nxt_z = alu_z;
+            end
+
+            `XOR:begin
+                nxt_n = alu_n;
+                nxt_v = alu_v;
+                nxt_z = alu_z;
+            end
+
+            `INC:begin
+                nxt_n = alu_n;
+                nxt_v = alu_v;
+                nxt_z = alu_z;
+            end
             default: begin end
         endcase
     end
-
-    task reg_set;
-        begin
-            nxt_n = alu_n;
-            nxt_v = alu_v;
-            nxt_z = alu_z;
-        end
-    endtask
 
     always @(posedge clk) begin
         n <= nxt_n;
