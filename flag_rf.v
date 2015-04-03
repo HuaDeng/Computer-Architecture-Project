@@ -72,5 +72,7 @@ module flag_rf(out, clk, alu_z, alu_v, alu_n, instr);
                 out = 1'b1;
             end
         endcase
+        if(instr[15:12] != `B)
+            out = 0;
     end
 endmodule 
