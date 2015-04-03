@@ -24,7 +24,7 @@ def parse_rf_output(output):
             if line:
                 register, value = line.split(' = ')
                 r = int(register[-1], base=16)
-                if value != 'xxxx':
+                if 'x' not in value:
                     v = int(value, base=16)
                     register_file_history[time, r] = v
 
@@ -363,4 +363,25 @@ class TestB(unittest.TestCase):
             register_file_history = parse_rf_output(rf_dump.read())
 
         self.assertListEqual(register_file_history[-1,:].tolist(), [0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0])
+
+class TestCALL(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/test_call.hex','./instr.hex')
+        check_call(['./dut_tb'])
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+        os.unlink('mem_dump.txt')
+
+    def test_call(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_rf_output(rf_dump.read())
+
+        self.assertEqual(register_file_history[-1,1], 1)
 
