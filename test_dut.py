@@ -69,3 +69,22 @@ class TestINC(unittest.TestCase):
         with open('rf_dump.txt') as rf_dump:
             register_file_history = parse_output(rf_dump.read())
         self.assertListEqual(register_file_history[-1,:].tolist(), [0,1,2,3,4,5,6,7,-8,-7,-6,-5,-4,-3,-2,-1])
+
+class TestSUB(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/test_sub.hex','./instr.hex')
+        check_call(['./dut_tb'])
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+
+    def test_sub(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_output(rf_dump.read())
+        self.assertListEqual(register_file_history[-1,:].tolist(), [0,0,1,2,-6,1,6,7,-8,-7,-6,-5,-4,-3,-2,-1])
