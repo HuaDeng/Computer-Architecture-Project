@@ -257,7 +257,7 @@ class TestSW(unittest.TestCase):
         os.unlink('rf_dump.txt')
         os.unlink('mem_dump.txt')
 
-    def test_sll(self):
+    def test_sw(self):
         with open('rf_dump.txt') as rf_dump:
             register_file_history = parse_rf_output(rf_dump.read())
 
@@ -272,3 +272,29 @@ class TestSW(unittest.TestCase):
 
         #SW R6, -0x1 ; DS = 0xFFFF
         self.assertEqual(end_mem[-2], register_file_history[-1, 6])
+
+class TestLW(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/test_lw.hex','./instr.hex')
+        check_call(['./dut_tb'])
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+        os.unlink('mem_dump.txt')
+
+    def test_lw(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_rf_output(rf_dump.read())
+
+        with open('mem_dump.txt') as mem_dump:
+            end_mem = parse_mem_output(mem_dump.read())
+
+        # LW R1, #-1  ; DS=0xFFFF
+        self.assertEqual(end_mem[-2], register_file_history[-1, 1])
+
