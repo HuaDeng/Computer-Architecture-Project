@@ -12,7 +12,8 @@ ALL_TESTS= alu_add_tb\
 		   MEM_tb\
 		   ID_tb\
 		   EX_tb\
-		   jump_tb
+		   jump_tb\
+		   dut_tb
 
 test: $(ALL_TESTS)
 
@@ -27,12 +28,6 @@ ctrl_%: wiscsc15_ctrl.v alu.v tests/ctrl_%.v
 flag_rf_tb: flag_rf.v tests/flag_rf_tb.v
 	iverilog $^ -o $@
 	./$@
-
-dut_tb: wiscsc15_ctrl.v tests/dut_tb.v dut.v alu.v data_mem.v instr_mem.v llb_unit.v lhb_unit.v program_counter.v rf_pipelined.v flag_rf.v tests/instr.hex
-	iverilog $(filter %.v, $^) -o $@
-	ln tests/instr.hex ./
-	./$@
-	rm instr.hex
 
 WB_tb: tests/WB_tb.v WB.v
 	iverilog $^ -o $@
@@ -53,6 +48,12 @@ EX_tb: tests/EX_tb.v EX.v alu.v
 jump_tb: tests/jump_tb.v jump.v
 	iverilog $^ -o $@
 	./$@
+
+dut_tb: program_counter.v instr_mem.v ID.v rf_pipelined.v EX.v alu.v flag_rf.v jump.v data_mem.v MEM.v WB.v tests/instr.hex dut.v
+	iverilog $(filter %.v, $^) -o $@
+	ln tests/instr.hex ./
+	./$@
+	rm instr.hex
 
 .PHONY: clean
 clean:
