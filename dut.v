@@ -55,9 +55,23 @@ module dut(clk, rst);
     wire[3:0] wb_addr;
     reg wb_we;
 
+    reg wb_we_latched;
+    reg[15:0] wb_wb_latched;
+    reg[3:0] wb_addr_latched;
+
+    assign rf_hlt = clk;
+
+    // Make the one half of a flip-flop
+    // The other half is inside the rf
+    always @(clk, wb_we, wb_wb, wb_addr)
+        if(~clk) begin
+            wb_we_latched <= wb_we;
+            wb_wb_latched <= wb_wb;
+            wb_addr_latched <= wb_addr;
+        end
 
     ID id(alu1, alu2, p0_addr, p1_addr, rf_re0, rf_re1, p0, p1, id_instr);
-    rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr,wb_wb,wb_we,rf_hlt);
+    rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr_latched,wb_wb_latched,wb_we_latched,rf_hlt);
 
 
     ///////////
@@ -111,7 +125,7 @@ module dut(clk, rst);
     EX ex(ex_result, ex_rt, alu_op, alu_a, alu_b, alu1, alu2, alu_result, ex_instr);
     ALU_16 alu(alu_op, alu_a, alu_b, alu_result, alu_z, alu_v, alu_n);
     flag_rf flag(branch, clk, alu_z, alu_v, alu_n, ex_instr);
-    jump jump1(nxt_PC, ex_pc, ex_instr, branch);
+    jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc);
 
 
     ///////////
