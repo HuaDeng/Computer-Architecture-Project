@@ -13,7 +13,6 @@ module dut_tb;
         clk = 0;
         while(a1.mem_instr != 16'hF000) begin
             @(posedge clk);
-            $display("================");
         end
         @(posedge clk);
         $finish;

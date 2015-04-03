@@ -17,6 +17,7 @@ input hlt;						// not a functional input.  Used to dump register contents when
 output reg [15:0] p0,p1;  				//output read ports
 
 integer indx;
+integer f;
 
 reg [15:0]mem[0:15];
 
@@ -75,9 +76,14 @@ always @(clk,re1,p1_addr)
 // Dump register contents at program //
 // halt for debug purposes          //
 /////////////////////////////////////
-always @(posedge hlt)
+always @(posedge hlt) begin
+  f = $fopen("rf_dump.txt", "a");
+  $fwrite(f, "=================\n");
   for(indx=1; indx<16; indx = indx+1)
-    $display("R%1h = %h",indx,mem[indx]);
+    $fwrite(f, "R%1h = %h\n",indx,mem[indx]);
+  $fclose(f);
+end
+
 	
 endmodule
   
