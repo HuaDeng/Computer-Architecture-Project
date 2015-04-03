@@ -70,7 +70,7 @@ module dut(clk, rst);
             wb_addr_latched <= wb_addr;
         end
 
-    ID id(alu1, alu2, p0_addr, p1_addr, rf_re0, rf_re1, p0, p1, id_instr);
+    ID id(id_alu1, id_alu2, p0_addr, p1_addr, rf_re0, rf_re1, p0, p1, id_instr);
     rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr_latched,wb_wb_latched,wb_we_latched,rf_hlt);
 
 
@@ -103,7 +103,7 @@ module dut(clk, rst);
         if(rst)
             alu1_reg <= 16'h0000;
         else
-            alu1_reg <= alu1;
+            alu1_reg <= id_alu1;
     end
 
     // alu2 flip-flop
@@ -111,18 +111,18 @@ module dut(clk, rst);
         if(rst)
             alu2_reg <= 16'h0000;
         else
-            alu2_reg <= alu2;
+            alu2_reg <= id_alu2;
     end
 
     ////////////////////////////////
     //          Execute           //
     ////////////////////////////////
 
-    wire[15:0] ex_result, ex_rt, alu_a, alu_b, alu1, alu2, alu_result, nxt_PC;
+    wire[15:0] ex_result, ex_rt, alu_a, alu_b, alu_result, nxt_PC;
     wire[2:0] alu_op;
     wire alu_z, alu_v, alu_n, branch;
 
-    EX ex(ex_result, ex_rt, alu_op, alu_a, alu_b, alu1, alu2, alu_result, ex_instr);
+    EX ex(ex_result, ex_rt, alu_op, alu_a, alu_b, alu1_reg, alu2_reg, alu_result, ex_instr);
     ALU_16 alu(alu_op, alu_a, alu_b, alu_result, alu_z, alu_v, alu_n);
     flag_rf flag(branch, clk, alu_z, alu_v, alu_n, ex_instr);
     jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc);
