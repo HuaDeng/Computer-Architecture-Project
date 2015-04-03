@@ -1,0 +1,30 @@
+0100  // add R1, R0, R0
+0200  // add R2, R0, R0
+0300  // ADD R3, R0, R0
+0400  // ADD R4, R0, R0
+0500  // ADD R5, R0, R0
+0600  // ADD R6, R0, R0
+0700  // ADD R7, R0, R0
+0800  // ADD R8, R0, R0
+0900  // ADD R9, R0, R0
+0A00  // ADD R10, R0, R0
+0B00  // ADD R11, R0, R0
+0C00  // ADD R12, R0, R0
+0D00  // ADD R13, R0, R0
+0E00  // ADD R14, R0, R0
+0F00  // ADD R15, R0, R0
+B505  // LLB R5, #5
+4221  // INC R2, R2, #1
+B900  // NOP
+B900  // NOP
+B900  // NOP
+455F  // INC R5, R5, #-1
+B900  // NOP
+B900  // NOP
+B900  // NOP
+B900  // NOP
+B900  // NOP
+C4F4  // BNE ^INC
+B900  // NOP
+B900  // NOP
+F000  // hlt
