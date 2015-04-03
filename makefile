@@ -49,7 +49,7 @@ jump_tb: tests/jump_tb.v jump.v
 	iverilog $^ -o $@
 	./$@
 
-dut_tb: program_counter.v instr_mem.v ID.v rf_pipelined.v EX.v alu.v flag_rf.v jump.v data_mem.v MEM.v WB.v tests/instr.hex dut.v
+dut_tb: tests/dut_tb.v program_counter.v instr_mem.v ID.v rf_pipelined.v EX.v alu.v flag_rf.v jump.v data_mem.v MEM.v WB.v tests/instr.hex dut.v
 	iverilog $(filter %.v, $^) -o $@
 	ln tests/instr.hex ./
 	./$@
