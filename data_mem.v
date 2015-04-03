@@ -14,6 +14,12 @@ input [15:0] wrt_data;	// data to be written
 output reg [15:0] rd_data;	//output of data memory
 
 reg [15:0]data_mem[0:65535];
+integer indx,f;
+reg dump;
+
+initial begin
+    dump = 0;
+end
 
 ///////////////////////////////////////////////
 // Model read, data is latched on clock low //
@@ -28,5 +34,14 @@ always @(addr,re,clk)
 always @(addr,we,clk)
   if (~clk && we && ~re)
     data_mem[addr] <= wrt_data;
+
+always @(clk) begin
+    if(dump) begin
+        f = $fopen("mem_dump.txt", "a");
+        for(indx=0; indx<65536; indx = indx+1)
+            $fwrite(f, "MEM%h = %h\n", indx, data_mem[indx]);
+        $fclose(f);
+    end
+end
 
 endmodule
