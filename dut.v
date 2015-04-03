@@ -58,7 +58,7 @@ module dut(clk, rst);
     assign rf_hlt = clk;
 
     ID id(id_alu1, id_alu2, p0_addr, p1_addr, rf_re0, rf_re1, p0, p1, id_instr);
-    rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr,wb_wb,wb_we,rf_hlt);
+    rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr_latched,wb_wb,wb_we,rf_hlt);
 
 
     ///////////
