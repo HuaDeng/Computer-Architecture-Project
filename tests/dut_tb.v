@@ -9,9 +9,9 @@ module dut_tb;
         $dumpvars;
         rst = 1;
         a1.dm.dump = 0;
+        clk = 0;
         #1;
         rst = 0;
-        clk = 0;
         while(a1.mem_instr != 16'hF000) begin
             @(posedge clk);
         end

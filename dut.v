@@ -27,16 +27,16 @@ module dut(clk, rst);
     // PC flip-flop
     always @(posedge clk, posedge rst) begin
         if(rst)
-            id_pc <= 16'h0000;
+            id_pc <= 0;
         else
             id_pc <= if_pc;
     end
 
-    // Instruction flop-flop
-    always @(posedge clk, posedge rst) begin
+    // Instruction latch
+    always @(clk, if_instr, rst) begin
         if(rst)
-            id_instr <= 16'h0000;
-        else
+            id_instr <= 0;
+        else if(clk)
             id_instr <= if_instr;
     end
 
