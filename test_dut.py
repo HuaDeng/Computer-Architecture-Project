@@ -298,3 +298,26 @@ class TestLW(unittest.TestCase):
         # LW R1, #-1  ; DS=0xFFFF
         self.assertEqual(end_mem[-2], register_file_history[-1, 1])
 
+
+class TestLHB(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/test_lhb.hex','./instr.hex')
+        check_call(['./dut_tb'])
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+        os.unlink('mem_dump.txt')
+
+    def test_lhb(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_rf_output(rf_dump.read())
+
+        self.assertListEqual([0x0000,0x0100,0x0200,0x0300,0x0400,0x0500,0x0600,0x0700,0x0800,0x0900,0x0A00,0x0B00,0x0C00,0x0D00,0x0E00,0x0F00],
+        register_file_history[-1].astype(np.uint16).tolist())
+

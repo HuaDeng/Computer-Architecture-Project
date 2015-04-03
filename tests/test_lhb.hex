@@ -1,0 +1,31 @@
+0100  // add R1, R0, R0
+0200  // add R2, R0, R0
+0300  // ADD R3, R0, R0
+0400  // ADD R4, R0, R0
+0500  // ADD R5, R0, R0
+0600  // ADD R6, R0, R0
+0700  // ADD R7, R0, R0
+0800  // ADD R8, R0, R0
+0900  // ADD R9, R0, R0
+0A00  // ADD R10, R0, R0
+0B00  // ADD R11, R0, R0
+0C00  // ADD R12, R0, R0
+0D00  // ADD R13, R0, R0
+0E00  // ADD R14, R0, R0
+0F00  // ADD R15, R0, R0
+A101  // LHB R1, #0x1
+A202  // LHB R2, #0x2
+A303  // LHB R3, #0x3
+A404  // LHB R4, #0x4
+A505  // LHB R5, #0x5
+A606  // LHB R6, #0x6
+A707  // LHB R7, #0x7
+A808  // LHB R8, #0x8
+A909  // LHB R9, #0x9
+AA0A  // LHB R10, #0xA
+AB0B  // LHB R11, #0xB
+AC0C  // LHB R12, #0xC
+AD0D  // LHB R13, #0xD
+AE0E  // LHB R14, #0xE
+AF0F  // LHB R15, #0xF
+F000  // hlt
