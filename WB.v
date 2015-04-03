@@ -6,7 +6,7 @@ module WB(wb_addr, nxt_ret_PC, instr, we, wb, ret_addr, nxt_PC);
     input[15:0] ret_addr;
     input[15:0] nxt_PC;
 
-    output reg[15:0] wb_addr;
+    output reg[3:0] wb_addr;
     output reg[15:0] nxt_ret_PC;
     
     wire[4:0] op;

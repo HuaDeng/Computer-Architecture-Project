@@ -6,7 +6,7 @@ module WB_tb;
     reg[15:0] ret_addr;
     reg[15:0] nxt_PC;
 
-    wire[15:0] wb_addr;
+    wire[3:0] wb_addr;
     wire[15:0] nxt_ret_PC;
 
 
