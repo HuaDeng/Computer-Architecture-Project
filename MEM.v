@@ -64,6 +64,7 @@ module MEM(wb, ret_addr, we, dm_in, dm_addr, dm_re, dm_we, instr_in, result, rt,
                     ret_addr = dm_out;
                     wb = result;
             end
+            `HALT: we = 0;
             default: begin
                 wb = 16'hxxxx;
                 ret_addr = 16'hxxxx;

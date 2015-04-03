@@ -15,4 +15,5 @@
 `define B   4'b1100
 `define CALL 4'b1101
 `define RET 4'b1110
+`define HALT 4'b1111
 `endif

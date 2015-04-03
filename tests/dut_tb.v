@@ -11,7 +11,11 @@ module dut_tb;
         #1;
         rst = 0;
         clk = 0;
-        repeat(20) @(posedge clk);
+        while(a1.wb_instr != 16'hF000) begin
+            @(posedge clk);
+            $display("================");
+        end
+        @(posedge clk);
         $finish;
     end
 
