@@ -138,7 +138,7 @@ module flag_rf_tb;
             rf_flag.z = 1;
             rf_flag.v = 1;
             rf_flag.n = 1;
-            instr = {`ADD, 12'hx };
+            instr = {`ADD, 12'h111 };
             alu_z = 0;
             alu_v = 0;
             alu_n = 0;
