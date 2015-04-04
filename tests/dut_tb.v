@@ -20,6 +20,12 @@ module dut_tb;
         $finish;
     end
 
+    initial begin
+        repeat(1000) @(posedge clk);
+        $display("Timeout");
+        $finish;
+    end
+
     always @(clk) #1 clk <= ~clk;
 
 endmodule

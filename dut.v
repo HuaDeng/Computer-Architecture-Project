@@ -13,16 +13,21 @@ module dut(clk, rst);
     wire hold;
     wire im_rd_en;
     wire[15:0] if_instr;
+    wire hazard;
 
     pc pc1(clk, rst, hold, in_PC, if_pc);
     IM im(clk, if_pc, im_rd_en, if_instr);
+    
+    reg[15:0] ex_instr, mem_instr;
+    reg[15:0] id_instr;
+
+    hazard_detection hz1(hazard, if_instr, id_instr, ex_instr, mem_instr);
 
 
     ///////////
     // IF/ID //
     ///////////
     reg[15:0] id_pc;
-    reg[15:0] id_instr;
 
     // PC flip-flop
     always @(posedge clk, posedge rst) begin
@@ -37,7 +42,10 @@ module dut(clk, rst);
         if(rst)
             id_instr <= 0;
         else if(clk)
-            id_instr <= if_instr;
+            if(hazard)
+                id_instr = 0;
+            else
+                id_instr <= if_instr;
     end
 
 
@@ -50,12 +58,12 @@ module dut(clk, rst);
     wire rf_hlt;
     wire[3:0] p0_addr, p1_addr;
 
+    assign rf_hlt = clk;
+
     // Comes from writeback
     reg[15:0] wb_wb;
     reg[3:0] wb_addr_latched;
     reg wb_we;
-
-    assign rf_hlt = clk;
 
     ID id(id_alu1, id_alu2, p0_addr, p1_addr, rf_re0, rf_re1, p0, p1, id_instr);
     rf rf1(clk,p0_addr,p1_addr,p0,p1,rf_re0,rf_re1,wb_addr_latched,wb_wb,wb_we,rf_hlt);
@@ -65,7 +73,6 @@ module dut(clk, rst);
     // ID/EX //
     ///////////
     reg[15:0] ex_pc;
-    reg[15:0] ex_instr;
     reg[15:0] alu1_reg;
     reg[15:0] alu2_reg;
 
@@ -119,7 +126,6 @@ module dut(clk, rst);
     // EX/ME //
     ///////////
     reg[15:0] mem_pc;
-    reg[15:0] mem_instr;
     reg[15:0] mem_result;
     reg[15:0] mem_rt;
 
