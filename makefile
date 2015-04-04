@@ -13,6 +13,7 @@ ALL_TESTS= alu_add_tb\
 		   ID_tb\
 		   EX_tb\
 		   jump_tb\
+		   hazard_detection_tb\
 		   dut_tb
 
 test: $(ALL_TESTS)
@@ -46,6 +47,10 @@ EX_tb: tests/EX_tb.v EX.v alu.v
 	./$@
 
 jump_tb: tests/jump_tb.v jump.v
+	iverilog $^ -o $@
+	./$@
+
+hazard_detection_tb:tests/hazard_detection_tb.v hazard_detection.v 
 	iverilog $^ -o $@
 	./$@
 

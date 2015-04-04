@@ -1,10 +1,9 @@
 `include "opcode.h"
-module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
+module hazard_detection(hazard, if_instr, id_instr, ex_instr);
     output reg hazard;
     input wire[15:0] if_instr;
     input wire[15:0] id_instr;
     input wire[15:0] ex_instr;
-    input wire[15:0] mem_instr;
 
     reg if_uses_read1;
     reg if_uses_read2;
@@ -17,31 +16,20 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
     reg ex_uses_write;
     reg[3:0] ex_write_addr;
 
-    reg mem_uses_write;
-    reg[3:0] mem_write_addr;
-
     // Determine if there is a hazard
     always @(*) begin
         hazard = 0;
-        if(if_uses_read1) begin
+        if(if_uses_read1 && (if_read1_addr != 0)) begin
             if(if_read1_addr == id_write_addr)
                 hazard = 1;
             if(if_read1_addr == ex_write_addr)
                 hazard = 1;
-            if(if_read1_addr == mem_write_addr)
-                hazard = 1;
-            if(if_read1_addr == 0)
-                hazard = 0;
         end
-        if(if_uses_read2) begin
+        if(if_uses_read2 && (if_read2_addr != 0)) begin
             if(if_read2_addr == id_write_addr)
                 hazard = 1;
             if(if_read2_addr == ex_write_addr)
                 hazard = 1;
-            if(if_read2_addr == mem_write_addr)
-                hazard = 1;
-            if(if_read2_addr == 0)
-                hazard = 0;
         end
     end
 
@@ -88,12 +76,43 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
         endcase
     end
 
-    // Find out if MEM stage uses write
+    // Find out the IF read1 addr
     always @(*) begin
-        case(mem_instr[15:12])
-            `SW: mem_uses_write = 0;
-            `B: mem_uses_write = 0;
-            default: mem_uses_write = 1;
+        if_read1_addr = if_instr[7:4];
+        if_read2_addr = if_instr[3:0];
+        case(if_instr[15:12])
+            `SW: begin
+                if_read1_addr = if_instr[11:8];
+                if_read2_addr = 4'd14;
+            end
+            `LW: begin
+                if_read1_addr = 4'hx;
+                if_read2_addr = 4'd14;
+            end
+            `LHB: begin
+                if_read1_addr = if_instr[11:8];
+                if_read2_addr = 4'hx;
+            end
+            `LLB: begin
+                if_read1_addr = if_instr[11:8];
+                if_read2_addr = 4'hx;
+            end
+            `B: begin
+                if_read1_addr = 4'hx;
+                if_read2_addr = 4'hx;
+            end
+            `CALL: begin
+                if_read1_addr = 4'd15;
+                if_read2_addr = 4'hx;
+            end
+            `RET: begin
+                if_read1_addr = 4'd15;
+                if_read2_addr = 4'hx;
+            end
+            default: begin
+                if_read1_addr = if_instr[7:4];
+                if_read2_addr = if_instr[3:0];
+            end
         endcase
     end
 
@@ -116,19 +135,7 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
             case(ex_instr[15:12])
                 `CALL: ex_write_addr = 4'd15;
                 `RET:  ex_write_addr = 4'd15;
-                default: ex_write_addr = id_instr[11:8];
-            endcase
-        end
-    end
-
-    // Find out MEM.write_addr
-    always @(*) begin
-        mem_write_addr = 4'hx;
-        if(mem_uses_write) begin
-            case(mem_instr[15:12])
-                `CALL: mem_write_addr = 4'd15;
-                `RET:  mem_write_addr = 4'd15;
-                default: mem_write_addr = id_instr[11:8];
+                default: ex_write_addr = ex_instr[11:8];
             endcase
         end
     end
