@@ -15,16 +15,16 @@
 0F00  // ADD R15, R0, R0
 B505  // LLB R5, #5
 4221  // INC R2, R2, #1
-B900  // NOP
-B900  // NOP
-B900  // NOP
+0000  // NOP
+0000  // NOP
+0000  // NOP
 455F  // INC R5, R5, #-1
-B900  // NOP
-B900  // NOP
-B900  // NOP
-B900  // NOP
-B900  // NOP
+0000  // NOP
+0000  // NOP
+0000  // NOP
+0000  // NOP
+0000  // NOP
 C4F4  // BNE ^INC
-B900  // NOP
-B900  // NOP
+0000  // NOP
+0000  // NOP
 F000  // hlt

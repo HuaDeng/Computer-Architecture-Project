@@ -23,9 +23,11 @@ module flag_rf(out, clk, alu_z, alu_v, alu_n, instr);
         case(instr[15:12])
             // If arithemtic instruction, clock in the new flags
             `ADD: begin
-                nxt_n = alu_n;
-                nxt_v = alu_v;
-                nxt_z = alu_z;
+                if(instr != 0) begin
+                    nxt_n = alu_n;
+                    nxt_v = alu_v;
+                    nxt_z = alu_z;
+                end
             end
             `SUB:begin
                 nxt_n = alu_n;
