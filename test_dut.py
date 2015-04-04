@@ -1,4 +1,4 @@
-from subprocess import check_output, check_call, PIPE
+from subprocess import check_output, check_call, PIPE, STDOUT
 import unittest
 import os
 import shutil
@@ -51,7 +51,7 @@ class TestClear(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_clear.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -72,7 +72,7 @@ class TestINC(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_inc.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -92,7 +92,7 @@ class TestSUB(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_sub.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -112,7 +112,7 @@ class TestNAND(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_nand.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -139,7 +139,7 @@ class TestXOR(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_xor.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -166,7 +166,7 @@ class TestSRA(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_sra.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -193,7 +193,7 @@ class TestSRL(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_srl.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -220,7 +220,7 @@ class TestSLL(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_sll.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -248,7 +248,7 @@ class TestSW(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_sw.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -279,7 +279,7 @@ class TestLW(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_lw.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -305,7 +305,7 @@ class TestLHB(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_lhb.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -327,7 +327,7 @@ class TestLLB(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_llb.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -349,7 +349,7 @@ class TestB(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_b.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -370,7 +370,7 @@ class TestCALL(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/test_call.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
@@ -392,7 +392,7 @@ class TestBasicOp(unittest.TestCase):
     def setUpClass(self):
         make_dut_tb()
         shutil.copy('tests/basic_op.hex','./instr.hex')
-        check_call(['./dut_tb'])
+        check_output(['./dut_tb'], stderr=STDOUT)
 
     @classmethod
     def tearDownClass(cls):
