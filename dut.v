@@ -15,7 +15,7 @@ module dut(clk, rst);
     wire[15:0] if_instr;
     wire hazard;
 
-    pc pc1(clk, rst, hazard, in_PC, if_pc);
+    pc pc1(clk, rst, hold, in_PC, if_pc);
     IM im(clk, if_pc, im_rd_en, if_instr);
     
     reg[15:0] ex_instr, mem_instr;
@@ -119,7 +119,7 @@ module dut(clk, rst);
     EX ex(ex_result, ex_rt, alu_op, alu_a, alu_b, alu1_reg, alu2_reg, alu_result, ex_instr);
     ALU_16 alu(alu_op, alu_a, alu_b, alu_result, alu_z, alu_v, alu_n);
     flag_rf flag(branch, clk, alu_z, alu_v, alu_n, ex_instr);
-    jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc);
+    jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc, hazard);
 
 
     ///////////

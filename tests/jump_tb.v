@@ -5,8 +5,11 @@ module jump_tb;
     reg branch;
 
     wire[15:0] nxt_pc;
+    wire hazard;
+
+    assign hazard = 0;
     
-    jump j1(nxt_pc, pc, ex_instr, branch, if_pc);
+    jump j1(nxt_pc, pc, ex_instr, branch, if_pc, hazard);
 
     initial begin
         test_add();
