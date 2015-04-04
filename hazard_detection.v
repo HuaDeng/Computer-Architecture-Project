@@ -42,6 +42,7 @@ module hazard_detection(data_hazard, control_hazard, id_instr, ex_instr, mem_ins
         case(ex_instr[15:12])
             `CALL: control_hazard = 1;
             `RET: control_hazard = 1;
+            `B: control_hazard = 1;
         endcase
         if(mem_instr[15:12] == `RET)
             control_hazard = 1;
