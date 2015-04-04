@@ -15,7 +15,7 @@ module dut(clk, rst);
     wire[15:0] if_instr;
     wire hazard;
 
-    pc pc1(clk, rst, hold, in_PC, if_pc);
+    pc pc1(clk, rst, hazard, in_PC, if_pc);
     IM im(clk, if_pc, im_rd_en, if_instr);
     
     reg[15:0] ex_instr, mem_instr;
