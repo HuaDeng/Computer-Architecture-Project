@@ -3,9 +3,10 @@ module hazard_detection_tb;
     wire hazard;
     reg[15:0] if_instr, id_instr, ex_instr, mem_instr;
     
-    hazard_detection h1(hazard, if_instr, id_instr, ex_instr);
+    hazard_detection h1(hazard, if_instr, id_instr, ex_instr, mem_instr);
 
     initial begin
+        mem_instr = 0;
         test1();
         test2();
         test3();
@@ -13,6 +14,7 @@ module hazard_detection_tb;
         test5();
         test6();
         test7();
+        test8();
     end
 
     task test1;
@@ -91,6 +93,18 @@ module hazard_detection_tb;
             #1;
             if(hazard !== 1)
                 $display("Fail test7 hazard: %h",hazard);
+        end
+    endtask
+
+    task test8;
+        begin
+            mem_instr = {`RET, 12'hx};
+            ex_instr = 0;
+            id_instr = 0;
+            if_instr = 0;
+            #1;
+            if(hazard !== 1)
+                $display("Fail test8 hazard: %h",hazard);
         end
     endtask
 

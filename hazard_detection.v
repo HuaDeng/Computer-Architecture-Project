@@ -1,9 +1,10 @@
 `include "opcode.h"
-module hazard_detection(hazard, if_instr, id_instr, ex_instr);
+module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
     output reg hazard;
     input wire[15:0] if_instr;
     input wire[15:0] id_instr;
     input wire[15:0] ex_instr;
+    input wire[15:0] mem_instr;
 
     reg if_uses_read1;
     reg if_uses_read2;
@@ -19,6 +20,7 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr);
     // Determine if there is a hazard
     always @(*) begin
         hazard = 0;
+        // Data hazards
         if(if_uses_read1 && (if_read1_addr != 0)) begin
             if(if_read1_addr == id_write_addr)
                 hazard = 1;
@@ -31,6 +33,15 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr);
             if(if_read2_addr == ex_write_addr)
                 hazard = 1;
         end
+        // Control hazards
+        case(id_instr[15:12])
+            `CALL: hazard = 1;
+            `RET: hazard = 1;
+        endcase
+        if(ex_instr[15:12] == `RET)
+            hazard = 1;
+        if(mem_instr[15:12] == `RET)
+            hazard = 1;
     end
 
     // Find out if the instruction in the IF stage uses read
