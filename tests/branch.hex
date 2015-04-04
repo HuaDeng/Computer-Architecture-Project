@@ -1,0 +1,21 @@
+@0000 B122   //    LLB R1, 0x22        # R1 = 0xxx22
+@0001 A100   //    LHB R1, 0x00        # R1 = 0x0022
+@0002 B211   //    LLB R2, 0x11        # R2 = 0xxx11
+@0003 A200   //    LHB R2, 0x00        # R2 = 0x0011
+@0004 1021   //    SUB R0, R2, R1      # This should clear the z flag, and set N flag
+@0005 C00A   //      B   EQ, FAIL
+@0006 B333   //    LLB R3, 0x33    # delayed branch, R3 = 0xxx33
+@0007 C102   //      B   LT, ARND
+@0008 A333   //    LHB R3, 0x33    # delayed branch, R3 = 0x3333
+@0009 C706   //      B   UNCOND, FAIL    # unconditional branch, ccc=111
+@000A B355   //    LLB R3, 0x55    # R3 = 0x3355
+@000B B000   //ARND:   LLB R0, 0x00        # This should not set the Z flag
+@000C A000   //      LHB R0, 0x00        # This should not set the Z flag
+@000D C002   //    B   EQ, FAIL
+@000E B355   //      LLB R3, 0x55    # delayed branch, R3 = 0x3355
+@000F C702   //    B   UNCOND, PASS    # unconditional branch, ccc=111
+@0010 A355   //      LHB R3, 0x55    # delayed branch, R3 = 0x5555
+@0011 BAFF   //FAIL:   LLB R10, 0xFF       # R10 will contain 0xxxFF
+@0012 AAFF   //      LHB R10, 0xFF       # R10 will contain 0xFFFF (indicates failure)       
+@0013 BBAA   //PASS:   LLB R11, 0xAA       # R11 will contain 0xxxAA
+@0014 ABAA   //      LHB R11, 0xAA       # R11 will contain 0xAAAA (indicated pass)

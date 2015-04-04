@@ -438,3 +438,25 @@ class TestDataDependency(unittest.TestCase):
         register_file_history[-1].astype(np.uint16).tolist())
         self.assertEqual(0x0000, end_mem[1].astype(np.uint16))
         self.assertEqual(0x0000, end_mem[7].astype(np.uint16))
+
+class TestBranch(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/branch.hex','./instr.hex')
+        check_output(['./dut_tb'], stderr=STDOUT)
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+        os.unlink('mem_dump.txt')
+
+    def test_branch(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_rf_output(rf_dump.read())
+
+        self.assertListEqual([0x0000,0x0022,0x0011,0x5555,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xAAAA,0xDEAD,0xDEAD,0xDEAD,0xDEAD],
+        register_file_history[-1].astype(np.uint16).tolist())
