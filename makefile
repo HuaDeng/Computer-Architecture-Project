@@ -6,7 +6,6 @@ ALL_TESTS= alu_add_tb\
 		   alu_sra_tb\
 		   alu_srl_tb\
 		   alu_sll_tb\
-		   ctrl_arith_tb\
 		   flag_rf_tb\
 		   WB_tb\
 		   MEM_tb\
