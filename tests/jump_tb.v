@@ -5,11 +5,13 @@ module jump_tb;
     reg branch;
 
     wire[15:0] nxt_pc;
-    wire hazard;
+    wire control_hazard;
+    wire data_hazard;
 
-    assign hazard = 0;
+    assign control_hazard = 0;
+    assign data_hazard = 0;
     
-    jump j1(nxt_pc, pc, ex_instr, branch, if_pc, hazard);
+    jump j1(nxt_pc, pc, ex_instr, branch, if_pc, id_pc, control_hazard, data_hazard);
 
     initial begin
         test_add();

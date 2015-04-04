@@ -7,7 +7,7 @@ module pc(clk, rst, hold, in_PC, out_PC);
 
 	output reg [15:0] out_PC;
 
-	always @(negedge clk or posedge rst) begin
+	always @(posedge clk or posedge rst) begin
 		if(rst) begin
 			out_PC <= 16'h0000;
 		end

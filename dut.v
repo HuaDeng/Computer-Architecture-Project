@@ -13,7 +13,7 @@ module dut(clk, rst);
     wire hold;
     wire im_rd_en;
     wire[15:0] if_instr;
-    wire hazard;
+    wire data_hazard, control_hazard;
 
     pc pc1(clk, rst, hold, in_PC, if_pc);
     IM im(clk, if_pc, im_rd_en, if_instr);
@@ -21,7 +21,7 @@ module dut(clk, rst);
     reg[15:0] ex_instr, mem_instr;
     reg[15:0] id_instr;
 
-    hazard_detection hz1(hazard, if_instr, id_instr, ex_instr, mem_instr);
+    hazard_detection hz1(data_hazard, control_hazard, id_instr, ex_instr, mem_instr);
 
 
     ///////////
@@ -34,18 +34,20 @@ module dut(clk, rst);
         if(rst)
             id_pc <= 0;
         else
-            id_pc <= if_pc;
+            if(!control_hazard)
+                id_pc <= if_pc;
     end
 
     // Instruction latch
     always @(clk, if_instr, rst) begin
         if(rst)
             id_instr <= 0;
-        else if(clk)
-            if(hazard)
-                id_instr = 0;
+        else if(clk && !data_hazard)
+            if(control_hazard)
+                id_instr <= 0;
             else
                 id_instr <= if_instr;
+
     end
 
 
@@ -81,7 +83,10 @@ module dut(clk, rst);
         if(rst)
             ex_instr <= 16'h0000;
         else
-            ex_instr <= id_instr;
+            if(data_hazard)
+                ex_instr <= 0;
+            else
+                ex_instr <= id_instr;
     end
 
     // PC flip-flop
@@ -119,7 +124,7 @@ module dut(clk, rst);
     EX ex(ex_result, ex_rt, alu_op, alu_a, alu_b, alu1_reg, alu2_reg, alu_result, ex_instr);
     ALU_16 alu(alu_op, alu_a, alu_b, alu_result, alu_z, alu_v, alu_n);
     flag_rf flag(branch, clk, alu_z, alu_v, alu_n, ex_instr);
-    jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc, hazard);
+    jump jump1(nxt_PC, ex_pc, ex_instr, branch, if_pc, id_pc, control_hazard, data_hazard);
 
 
     ///////////

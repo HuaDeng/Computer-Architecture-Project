@@ -1,80 +1,83 @@
 `include "opcode.h"
-module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
-    output reg hazard;
-    input wire[15:0] if_instr;
+module hazard_detection(data_hazard, control_hazard, id_instr, ex_instr, mem_instr);
+    output reg data_hazard;
+    output reg control_hazard;
     input wire[15:0] id_instr;
     input wire[15:0] ex_instr;
     input wire[15:0] mem_instr;
 
-    reg if_uses_read1;
-    reg if_uses_read2;
-    reg[3:0] if_read1_addr;
-    reg[3:0] if_read2_addr;
-
-    reg id_uses_write;
-    reg[3:0] id_write_addr;
+    reg id_uses_read1;
+    reg id_uses_read2;
+    reg[3:0] id_read1_addr;
+    reg[3:0] id_read2_addr;
 
     reg ex_uses_write;
     reg[3:0] ex_write_addr;
 
+    reg mem_uses_write;
+    reg[3:0] mem_write_addr;
+
     // Determine if there is a hazard
     always @(*) begin
-        hazard = 0;
+        data_hazard = 0;
+        control_hazard = 0;
         // Data hazards
-        if(if_uses_read1 && (if_read1_addr != 0)) begin
-            if(if_read1_addr == id_write_addr)
-                hazard = 1;
-            if(if_read1_addr == ex_write_addr)
-                hazard = 1;
+        if(id_uses_read1 && (id_read1_addr != 0)) begin
+            if(id_read1_addr == mem_write_addr)
+                data_hazard = 1;
+            if(id_read1_addr == ex_write_addr)
+                data_hazard = 1;
         end
-        if(if_uses_read2 && (if_read2_addr != 0)) begin
-            if(if_read2_addr == id_write_addr)
-                hazard = 1;
-            if(if_read2_addr == ex_write_addr)
-                hazard = 1;
+        if(id_uses_read2 && (id_read2_addr != 0)) begin
+            if(id_read2_addr == mem_write_addr)
+                data_hazard = 1;
+            if(id_read2_addr == ex_write_addr)
+                data_hazard = 1;
         end
         // Control hazards
         case(id_instr[15:12])
-            `CALL: hazard = 1;
-            `RET: hazard = 1;
+            `CALL: control_hazard = 1;
+            `RET: control_hazard = 1;
         endcase
-        if(ex_instr[15:12] == `RET)
-            hazard = 1;
+        case(ex_instr[15:12])
+            `CALL: control_hazard = 1;
+            `RET: control_hazard = 1;
+        endcase
         if(mem_instr[15:12] == `RET)
-            hazard = 1;
+            control_hazard = 1;
     end
 
     // Find out if the instruction in the IF stage uses read
     always @(*) begin
-        if_uses_read1 = 1;
-        if_uses_read2 = 1;
-        case(if_instr[15:12])
-            `INC: if_uses_read2 = 0;
-            `SRA: if_uses_read2 = 0;
-            `SRL: if_uses_read2 = 0;
-            `SLL: if_uses_read2 = 0;
-            `LW: if_uses_read1 = 0;
-            `LHB: if_uses_read2 = 0;
-            `LLB: if_uses_read2 = 0;
+        id_uses_read1 = 1;
+        id_uses_read2 = 1;
+        case(id_instr[15:12])
+            `INC: id_uses_read2 = 0;
+            `SRA: id_uses_read2 = 0;
+            `SRL: id_uses_read2 = 0;
+            `SLL: id_uses_read2 = 0;
+            `LW: id_uses_read1 = 0;
+            `LHB: id_uses_read2 = 0;
+            `LLB: id_uses_read2 = 0;
             `B: begin
-                if_uses_read1 = 0;
-                if_uses_read2 = 0;
+                id_uses_read1 = 0;
+                id_uses_read2 = 0;
             end
-            `CALL: if_uses_read2 = 0;
-            `RET: if_uses_read2 = 0;
+            `CALL: id_uses_read2 = 0;
+            `RET: id_uses_read2 = 0;
             default: begin
-                if_uses_read1 = 1;
-                if_uses_read2 = 1;
+                id_uses_read1 = 1;
+                id_uses_read2 = 1;
             end
         endcase
     end
 
-    // Find out if ID stage uses write
+    // Find out if MEM stage uses write
     always @(*) begin
-        case(id_instr[15:12])
-            `SW: id_uses_write = 0;
-            `B: id_uses_write = 0;
-            default: id_uses_write = 1;
+        case(mem_instr[15:12])
+            `SW: mem_uses_write = 0;
+            `B: mem_uses_write = 0;
+            default: mem_uses_write = 1;
         endcase
     end
 
@@ -89,52 +92,52 @@ module hazard_detection(hazard, if_instr, id_instr, ex_instr, mem_instr);
 
     // Find out the IF read1 addr
     always @(*) begin
-        if_read1_addr = if_instr[7:4];
-        if_read2_addr = if_instr[3:0];
-        case(if_instr[15:12])
+        id_read1_addr = id_instr[7:4];
+        id_read2_addr = id_instr[3:0];
+        case(id_instr[15:12])
             `SW: begin
-                if_read1_addr = if_instr[11:8];
-                if_read2_addr = 4'd14;
+                id_read1_addr = id_instr[11:8];
+                id_read2_addr = 4'd14;
             end
             `LW: begin
-                if_read1_addr = 4'hx;
-                if_read2_addr = 4'd14;
+                id_read1_addr = 4'hx;
+                id_read2_addr = 4'd14;
             end
             `LHB: begin
-                if_read1_addr = if_instr[11:8];
-                if_read2_addr = 4'hx;
+                id_read1_addr = id_instr[11:8];
+                id_read2_addr = 4'hx;
             end
             `LLB: begin
-                if_read1_addr = if_instr[11:8];
-                if_read2_addr = 4'hx;
+                id_read1_addr = id_instr[11:8];
+                id_read2_addr = 4'hx;
             end
             `B: begin
-                if_read1_addr = 4'hx;
-                if_read2_addr = 4'hx;
+                id_read1_addr = 4'hx;
+                id_read2_addr = 4'hx;
             end
             `CALL: begin
-                if_read1_addr = 4'd15;
-                if_read2_addr = 4'hx;
+                id_read1_addr = 4'd15;
+                id_read2_addr = 4'hx;
             end
             `RET: begin
-                if_read1_addr = 4'd15;
-                if_read2_addr = 4'hx;
+                id_read1_addr = 4'd15;
+                id_read2_addr = 4'hx;
             end
             default: begin
-                if_read1_addr = if_instr[7:4];
-                if_read2_addr = if_instr[3:0];
+                id_read1_addr = id_instr[7:4];
+                id_read2_addr = id_instr[3:0];
             end
         endcase
     end
 
-    // Find out ID.write addr
+    // Find out MEM.write addr
     always @(*) begin
-        id_write_addr = 4'hx;
-        if(id_uses_write) begin
-            case(id_instr[15:12])
-                `CALL: id_write_addr = 4'd15;
-                `RET:  id_write_addr = 4'd15;
-                default: id_write_addr = id_instr[11:8];
+        mem_write_addr = 4'hx;
+        if(mem_uses_write) begin
+            case(mem_instr[15:12])
+                `CALL: mem_write_addr = 4'd15;
+                `RET:  mem_write_addr = 4'd15;
+                default: mem_write_addr = mem_instr[11:8];
             endcase
         end
     end

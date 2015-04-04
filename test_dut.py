@@ -411,3 +411,30 @@ class TestBasicOp(unittest.TestCase):
         self.assertListEqual([0x0000,0x0001,0x0010,0x0011,0xFFFF,0x0011,0x0011,0x000F,0xFFFF,0x0FFF,0xFFF0,0xFFF0,0xDEAD,0xDEAD,0x000B,0xDEAD],
         register_file_history[-1].astype(np.uint16).tolist())
         self.assertEqual(0xFFF0, end_mem[10].astype(np.uint16))
+
+class TestDataDependency(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(self):
+        make_dut_tb()
+        shutil.copy('tests/data_dependency.hex','./instr.hex')
+        check_output(['./dut_tb'], stderr=STDOUT)
+
+    @classmethod
+    def tearDownClass(cls):
+        make_clean()
+        os.unlink('instr.hex')
+        os.unlink('rf_dump.txt')
+        os.unlink('mem_dump.txt')
+
+    def test_data_dependency(self):
+        with open('rf_dump.txt') as rf_dump:
+            register_file_history = parse_rf_output(rf_dump.read())
+
+        with open('mem_dump.txt') as mem_dump:
+            end_mem = parse_mem_output(mem_dump.read())
+
+        self.assertListEqual([0x0000,0x0000,0x0000,0x0000,0x000C,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0xDEAD,0x0000,0xDEAD],
+        register_file_history[-1].astype(np.uint16).tolist())
+        self.assertEqual(0x0000, end_mem[1].astype(np.uint16))
+        self.assertEqual(0x0000, end_mem[7].astype(np.uint16))
