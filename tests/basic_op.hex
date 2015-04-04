@@ -1,0 +1,18 @@
+B101  // LLB R1, #0x1
+A100  // LHB R1, #0x0
+B210  // LLB R2, #0x10  
+A200  // LHB R2, #0x0
+1011  // SUB R0, R1, R1
+0312  // ADD R3, R1, R2
+2412  // NAND R4, R1, R2
+3512  // XOR R5, R1, R2
+4621  // INC R6, R2, #1
+472F  // INC R7, R2, #0xF
+5844  // SRA R8, R4, #0x4
+6944  // SRL R9, R4, #0x4
+7A44  // SLL R10, R4, #0x4
+BE0B  // LLB R14, #0xB
+AE00  // LHB R14, #0x00 
+9AFF  // SW, R10, #0xFF 
+8BFF  // LW, R11, #0xFF 
+F000  // hlt
