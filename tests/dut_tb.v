@@ -21,7 +21,7 @@ module dut_tb;
     end
 
     initial begin
-        repeat(1000) @(posedge clk);
+        repeat(3000) @(posedge clk);
         a1.dm.dump = 1;
         $display("Timeout");
         #1;

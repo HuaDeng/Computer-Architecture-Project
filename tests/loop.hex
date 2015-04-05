@@ -1,0 +1,9 @@
+B100 //    LLB R1, 0x00 
+A102 //    LHB R1, 0x02        # R1=0x0200 
+B201 //    LLB R2, 0x01 
+A200 //    LHB R2, 0x00        # R2=0x0001 
+B300 //    LLB R3, 0x00 
+A300 //    LHB R3, 0x00        # R3=0x0000 
+1112 //Repeat: SUB R1, R1, R2 
+C4FD //    B   NEQ, Repeat 
+0332 //    ADD R3, R3, R2      # R3=R3+0x0001 
