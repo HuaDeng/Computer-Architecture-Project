@@ -1,0 +1,21 @@
+//##################################################
+//# This test focuses more on control instructions #
+//##################################################
+@0000 BF00   //      LLB R15, 0x00
+@0001 AF0F   //      LHB R15, 0x0F       # R15=0x0F00
+@0002 A100   //      LHB R1, 0x00
+@0003 B1AA   //      LLB R1, 0xAA        # R1=0x00AA
+@0004 C700   //      B UNCOND, CONT      # branch to CONT1
+@0005 1011   //      SUB R0, R1, R1      # R0=0
+@0006 D00C   //CONT: CALL FUNC       # call to function
+@0007 A400   //      LHB R4, 0x00        # R4 = 0x0057
+@0008 B457   //      LLB R4, 0x57
+@0009 1034   //      SUB R0, R3, R4      # R0=0
+@000A C005   //      B EQ, PASS
+@000B 0000   //      ADD R0, R0, R0
+@000C A300   //FUNC: LHB R3, 0x00        # R3 = 0x0057
+@000D B357   //      LLB R3, 0x57
+@000E E000   //      RET         # return
+@000F A2FF   //FAIL: LHB R2, 0xFF        # R2 will contain 0xFFxx
+@0010 B2FF   //      LLB R2, 0xFF        # R2 will contain 0xFFFF (indicates failure)        
+@0011 A1AA   //PASS: LHB R1, 0xAA        # R1 will contain 0xAAAA (indicated pass)
