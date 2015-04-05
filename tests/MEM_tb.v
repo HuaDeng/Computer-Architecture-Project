@@ -251,7 +251,7 @@ module MEM_tb;
                 $display("Failed test_call we: %h", we);
             if(wb !== 16'd1)
                 $display("Failed test_call wb: %h", wb);
-            if(d1.data_mem[2] !== 16'hBABA)
+            if(d1.data_mem[2] !== 16'hBABB)
                 $display("Failed test_call data_mem: %h", d1.data_mem[2]);
         end
     endtask
@@ -272,8 +272,6 @@ module MEM_tb;
                 $display("Failed test_ret wb: %h", wb);
             if(ret_addr !== 16'hABCD)
                 $display("Failed test_ret ret_addr: %h", ret_addr);
-            if(d1.data_mem[2] !== 16'hBABA)
-                $display("Failed test_ret data_mem: %h", d1.data_mem[2]);
         end
     endtask
 
