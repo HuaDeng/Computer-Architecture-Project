@@ -39,14 +39,15 @@ module dut(clk, rst);
     end
 
     // Instruction latch
-    always @(clk, if_instr, rst) begin
+    always @(posedge clk, posedge rst) begin
         if(rst)
             id_instr <= 0;
-        else if(clk && !data_hazard)
-            if(control_hazard)
-                id_instr <= 0;
-            else
-                id_instr <= if_instr;
+        else 
+            if(!data_hazard)
+                if(control_hazard)
+                    id_instr <= 0;
+                else
+                    id_instr <= if_instr;
 
     end
 
