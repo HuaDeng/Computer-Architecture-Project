@@ -1,7 +1,7 @@
 `include "opcode.h"
 module jump_tb;
     reg[15:0] ex_instr;
-    reg[15:0] pc, if_pc;
+    reg[15:0] pc, if_pc, id_pc;
     reg branch;
 
     wire[15:0] nxt_pc;
